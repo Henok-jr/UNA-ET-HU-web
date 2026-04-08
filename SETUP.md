@@ -2,33 +2,23 @@
 
 ## Step 1: Install Dependencies
 
-Navigate to the website directory and install all dependencies:
+Install all dependencies:
 
 ```bash
-cd website
 npm install
 ```
 
 ## Step 2: Set Up Environment Variables
 
-Create a `.env` file in the `website` directory with the following content:
+This repo expects PostgreSQL via Prisma. Prisma is configured to read:
+- `DATABASE_URL` (recommended: pooled connection for runtime)
+- `DIRECT_URL` (direct connection for migrations)
 
-```env
-# Database Connection
-# For local PostgreSQL (adjust username, password, and database name)
-DATABASE_URL="postgresql://postgres:password@localhost:5432/una_et_hu?schema=public"
+Use the template in [.env.example](.env.example).
 
-# For production, use a connection string from your PostgreSQL provider
-# Example: DATABASE_URL="postgresql://user:password@host:5432/database?schema=public"
-
-# NextAuth Configuration (generate a random secret)
-# You can generate one at: https://generate-secret.vercel.app/32
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-key-here-replace-with-random-string"
-
-# App Environment
-NODE_ENV="development"
-```
+Notes:
+- Prisma CLI loads `.env` by default. If you only create `.env.local`, Prisma may not see your DB URLs.
+- Recommended: put `DATABASE_URL` and `DIRECT_URL` in `.env` for Prisma commands.
 
 ### Option 1: Using Local PostgreSQL
 
@@ -37,15 +27,20 @@ NODE_ENV="development"
    ```sql
    CREATE DATABASE una_et_hu;
    ```
-3. Update `DATABASE_URL` in `.env` with your PostgreSQL credentials
+3. Update `DATABASE_URL` and `DIRECT_URL` in your env setup.
+   - `DATABASE_URL` can point at your local DB
+   - `DIRECT_URL` can be the same local DB URL
 
-### Option 2: Using a Cloud Database (Recommended for Quick Start)
+### Option 2: Using Supabase (Recommended)
 
-1. Sign up for a free PostgreSQL database at:
-   - [Supabase](https://supabase.com) (Free tier available)
-   - [Neon](https://neon.tech) (Free tier available)
-   - [Railway](https://railway.app) (Free tier available)
-2. Copy the connection string and paste it as `DATABASE_URL` in `.env`
+1. Create a Supabase project.
+2. Open Supabase Dashboard 8 Project Settings 8 Database 8 Connection string.
+3. Copy both connection strings:
+   - **Connection pooling** URI 8 set as `DATABASE_URL` (good for Next.js runtime)
+   - **Direct connection** URI 8 set as `DIRECT_URL` (required for Prisma migrations)
+4. Also set Supabase client env vars if you use uploads:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
 ## Step 3: Generate Prisma Client
 
@@ -55,18 +50,18 @@ After setting up your database, generate the Prisma client:
 npx prisma generate
 ```
 
-## Step 4: Push Database Schema
+## Step 4: Create Tables
 
-Push the database schema to create all tables:
-
-```bash
-npx prisma db push
-```
-
-Alternatively, if you want to use migrations:
+If this is a brand-new database (recommended):
 
 ```bash
 npx prisma migrate dev --name init
+```
+
+If you prefer to avoid migrations (less recommended for production):
+
+```bash
+npx prisma db push
 ```
 
 ## Step 5: Run the Development Server
