@@ -32,10 +32,39 @@ function socialUrl(platform: 'linkedin' | 'instagram' | 'telegram', handle: stri
   return `https://t.me/${normalized}`;
 }
 
+async function ensureDeveloperTable() {
+  await prisma.$executeRawUnsafe(`
+    CREATE TABLE IF NOT EXISTS "developers" (
+      "id" TEXT PRIMARY KEY,
+      "full_name" TEXT NOT NULL,
+      "title" TEXT NOT NULL,
+      "mobile" TEXT NOT NULL,
+      "email" TEXT NOT NULL,
+      "image" TEXT,
+      "linkedin_username" TEXT,
+      "instagram_username" TEXT,
+      "telegram_username" TEXT,
+      "order" INTEGER NOT NULL DEFAULT 0,
+      "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+}
+
 export default async function DevelopersPage() {
-  const developers = await prisma.developer.findMany({
-    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
-  });
+  let developers: Developer[] = [];
+  let loadError = false;
+
+  try {
+    await ensureDeveloperTable();
+
+    developers = await prisma.developer.findMany({
+      orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
+    });
+  } catch (error) {
+    loadError = true;
+    console.error('Failed to load developers:', error);
+  }
 
   return (
     <div className="min-h-screen bg-[#eef3f9] dark:bg-[#0f1220] flex flex-col">
@@ -52,7 +81,14 @@ export default async function DevelopersPage() {
 
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {developers.length === 0 ? (
+            {loadError ? (
+              <div className="col-span-full rounded-xl border border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-900/20 p-10 text-center text-amber-800 dark:text-amber-200 shadow-sm">
+                Developer profiles are temporarily unavailable.
+                <div className="mt-2 text-sm text-amber-700 dark:text-amber-300">
+                  The content source could not be loaded right now.
+                </div>
+              </div>
+            ) : developers.length === 0 ? (
               <div className="col-span-full rounded-xl border border-[#dadae7] dark:border-gray-700 bg-white dark:bg-[#1a1a2e] p-10 text-center text-[#5e5f8d] dark:text-gray-400 shadow-sm">
                 No developers have been added yet.
               </div>

@@ -16,8 +16,29 @@ function normalizeHandle(value: unknown) {
   return trimmed.replace(/^@+/, '');
 }
 
+async function ensureDeveloperTable() {
+  await prisma.$executeRawUnsafe(`
+    CREATE TABLE IF NOT EXISTS "developers" (
+      "id" TEXT PRIMARY KEY,
+      "full_name" TEXT NOT NULL,
+      "title" TEXT NOT NULL,
+      "mobile" TEXT NOT NULL,
+      "email" TEXT NOT NULL,
+      "image" TEXT,
+      "linkedin_username" TEXT,
+      "instagram_username" TEXT,
+      "telegram_username" TEXT,
+      "order" INTEGER NOT NULL DEFAULT 0,
+      "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+}
+
 export async function GET() {
   try {
+    await ensureDeveloperTable();
+
     const developers = await prisma.developer.findMany({
       orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
     });
@@ -34,6 +55,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    await ensureDeveloperTable();
+
     const session = await getServerSession(authOptions);
 
     if (!session || (session.user as any).role !== 'SUPER_ADMIN') {
