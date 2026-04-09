@@ -8,6 +8,7 @@ declare module 'next-auth' {
       email: string;
       name: string;
       role: 'SUPER_ADMIN' | 'ADMIN' | 'MEMBER' | 'GUEST';
+      image?: string | null;
     };
   }
 
