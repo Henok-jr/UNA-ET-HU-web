@@ -79,7 +79,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'A file is required' }, { status: 400 });
     }
 
-    if (!fileEntry.type.startsWith('image/') && fileEntry.type !== 'application/pdf') {
+    const sourceFileName = fileEntry.name.toLowerCase();
+    const isPdf = fileEntry.type === 'application/pdf' || sourceFileName.endsWith('.pdf');
+    const isImage = fileEntry.type.startsWith('image/') || /\.(png|jpe?g|gif|webp|avif|bmp|svg)$/i.test(sourceFileName);
+
+    if (!isImage && !isPdf) {
       return NextResponse.json(
         { error: 'Only image and PDF uploads are supported' },
         { status: 400 }
@@ -92,9 +96,9 @@ export async function POST(request: NextRequest) {
         : DEFAULT_BUCKET;
     const folder = normalizePrefix(formData.get('folder'));
 
-    const fileExt = fileEntry.name.split('.').pop() || (fileEntry.type === 'application/pdf' ? 'pdf' : 'bin');
-    const fileName = `${crypto.randomUUID()}.${fileExt}`;
-    const objectPath = folder ? `${folder}/${fileName}` : fileName;
+    const fileExt = sourceFileName.split('.').pop() || (isPdf ? 'pdf' : 'bin');
+    const objectFileName = `${crypto.randomUUID()}.${fileExt}`;
+    const objectPath = folder ? `${folder}/${objectFileName}` : objectFileName;
 
     const supabase = getSupabaseAdminClient();
     await ensurePublicBucket(supabase.storage, bucketName);
@@ -102,7 +106,7 @@ export async function POST(request: NextRequest) {
     const { error: uploadError } = await supabase.storage
       .from(bucketName)
       .upload(objectPath, Buffer.from(await fileEntry.arrayBuffer()), {
-        contentType: fileEntry.type,
+        contentType: fileEntry.type || (isPdf ? 'application/pdf' : 'application/octet-stream'),
         upsert: false,
       });
 

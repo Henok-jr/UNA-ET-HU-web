@@ -28,7 +28,8 @@ export const PdfUpload = ({
         }
 
         const file = e.target.files[0];
-        if (file.type !== 'application/pdf') {
+        const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+        if (!isPdf) {
             toast.error('Please upload a PDF file');
             return;
         }
