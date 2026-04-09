@@ -11,12 +11,14 @@ npm install
 ## Step 2: Set Up Environment Variables
 
 This repo expects PostgreSQL via Prisma. Prisma is configured to read:
+
 - `DATABASE_URL` (recommended: pooled connection for runtime)
 - `DIRECT_URL` (direct connection for migrations)
 
 Use the template in [.env.example](.env.example).
 
 Notes:
+
 - Prisma CLI loads `.env` by default. If you only create `.env.local`, Prisma may not see your DB URLs.
 - Recommended: put `DATABASE_URL` and `DIRECT_URL` in `.env` for Prisma commands.
 
@@ -24,9 +26,11 @@ Notes:
 
 1. Install PostgreSQL on your machine
 2. Create a database:
+
    ```sql
    CREATE DATABASE una_et_hu;
    ```
+
 3. Update `DATABASE_URL` and `DIRECT_URL` in your env setup.
    - `DATABASE_URL` can point at your local DB
    - `DIRECT_URL` can be the same local DB URL
@@ -34,11 +38,14 @@ Notes:
 ### Option 2: Using Supabase (Recommended)
 
 1. Create a Supabase project.
-2. Open Supabase Dashboard 8 Project Settings 8 Database 8 Connection string.
+2. Open Supabase Dashboard → Project Settings → Database → Connection string.
 3. Copy both connection strings:
-   - **Connection pooling** URI 8 set as `DATABASE_URL` (good for Next.js runtime)
-   - **Direct connection** URI 8 set as `DIRECT_URL` (required for Prisma migrations)
+
+   - **Connection pooling** URI → set as `DATABASE_URL` (good for Next.js runtime)
+   - **Direct connection** URI → set as `DIRECT_URL` (required for Prisma migrations)
+
 4. Also set Supabase client env vars if you use uploads:
+
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
@@ -72,7 +79,7 @@ Start the Next.js development server:
 npm run dev
 ```
 
-The website will be available at: **http://localhost:3000**
+The website will be available at: **[http://localhost:3000](http://localhost:3000)**
 
 ## Step 6: (Optional) Seed the Database
 
@@ -81,19 +88,24 @@ If you want to add some initial data, you can create a seed script later.
 ## Troubleshooting
 
 ### If you get "Cannot find module '@prisma/client'"
+
 Run:
+
 ```bash
 npx prisma generate
 ```
 
 ### If you get database connection errors
+
 1. Check your `DATABASE_URL` in `.env`
 2. Make sure PostgreSQL is running (if using local)
 3. Check your firewall settings
 4. Verify your database credentials
 
 ### If Tailwind CSS is not working
+
 The project uses Tailwind CSS v4. Make sure all dependencies are installed:
+
 ```bash
 npm install
 ```
@@ -107,7 +119,7 @@ npm install
 
 ## Database Management
 
-- `npx prisma studio` - Open Prisma Studio (visual database browser) at http://localhost:5555
+- `npx prisma studio` - Open Prisma Studio (visual database browser) at [http://localhost:5555](http://localhost:5555)
 - `npx prisma generate` - Generate Prisma Client after schema changes
 - `npx prisma db push` - Push schema changes to database
 - `npx prisma migrate dev` - Create and apply migrations

@@ -83,7 +83,7 @@ export default function Navigation() {
         </button>
       )}
 
-      <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-[#212935]/80 backdrop-blur-md overflow-hidden">
+      <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-[#212935]/80 backdrop-blur-md overflow-x-hidden overflow-y-visible">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
@@ -124,7 +124,7 @@ export default function Navigation() {
 
                   {/* Dropdown Menu */}
                   <div
-                    className={`absolute top-full left-0 mt-2 w-60 bg-white dark:bg-[#1a1d23] rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-200 origin-top ${isTeamsOpen
+                    className={`absolute top-full left-0 z-[60] mt-2 w-60 bg-white dark:bg-[#1a1d23] rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-200 origin-top ${isTeamsOpen
                       ? 'opacity-100 translate-y-0 scale-100'
                       : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'
                       }`}
@@ -188,7 +188,7 @@ export default function Navigation() {
 
                   {/* Dropdown Menu */}
                   <div
-                    className={`absolute top-full left-0 mt-2 w-48 bg-white dark:bg-[#1a1d23] rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-200 origin-top ${isNewsletterOpen
+                    className={`absolute top-full left-0 z-[60] mt-2 w-48 bg-white dark:bg-[#1a1d23] rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-200 origin-top ${isNewsletterOpen
                       ? 'opacity-100 translate-y-0 scale-100'
                       : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'
                       }`}
@@ -257,7 +257,7 @@ export default function Navigation() {
 
                   {/* Dropdown Menu */}
                   {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-[#1a1d23] border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="absolute right-0 z-[70] mt-2 w-64 bg-white dark:bg-[#1a1d23] border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg py-2 animate-in fade-in slide-in-from-top-2 duration-200">
                       <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700">
                         <p className="text-sm font-semibold text-slate-900 dark:text-white">
                           {session.user?.name}

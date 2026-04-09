@@ -16,6 +16,7 @@ interface GalleryImage {
     width: number;
     height: number;
     category: string | null;
+    eventDate?: string | null;
     createdAt: string;
 }
 
@@ -98,6 +99,28 @@ function GalleryGrid({ activeCategory, images }: { activeCategory: string, image
                                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                                <div className="absolute inset-x-0 bottom-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="flex items-end justify-between gap-3">
+                                        <div className="min-w-0">
+                                            <p className="text-white text-sm font-semibold line-clamp-1">
+                                                {image.caption || 'Untitled'}
+                                            </p>
+                                            <p className="text-white/80 text-xs">
+                                                {new Date(image.eventDate || image.createdAt).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                        <a
+                                            href={image.url}
+                                            download
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="shrink-0 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-1.5 text-xs font-semibold text-white transition-colors"
+                                        >
+                                            Download
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     ))}

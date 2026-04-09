@@ -1,7 +1,45 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const trimmed = email.trim();
+    if (!trimmed) return;
+
+    setIsSubmitting(true);
+    const loadingToast = toast.loading('Subscribing...');
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: trimmed }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        toast.error(data.error || 'Failed to subscribe', { id: loadingToast });
+        return;
+      }
+
+      toast.success('Subscribed successfully!', { id: loadingToast });
+      setEmail('');
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to subscribe', { id: loadingToast });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <footer className="bg-[#212935] text-slate-300 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -69,14 +107,14 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <Link href="/updates#reports" className="hover:text-primary transition-colors">
                   Annual Reports
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <Link href="/updates#events" className="hover:text-primary transition-colors">
                   Upcoming Events
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -118,17 +156,21 @@ export default function Footer() {
             <p className="text-sm mb-4">
               Stay updated on our latest diplomatic events and SDG workshops.
             </p>
-            <form className="flex flex-col gap-2">
+            <form className="flex flex-col gap-2" onSubmit={onSubscribe}>
               <input
                 type="email"
                 placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isSubmitting}
                 className="bg-slate-800 border-slate-700 rounded-lg text-sm px-4 py-2 focus:ring-primary focus:border-primary outline-none"
               />
               <button
                 type="submit"
+                disabled={isSubmitting || !email.trim()}
                 className="bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 rounded-lg transition-colors"
               >
-                Subscribe
+                {isSubmitting ? 'Subscribing...' : 'Subscribe'}
               </button>
             </form>
           </div>

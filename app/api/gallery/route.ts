@@ -39,16 +39,26 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { url, caption, width, height, category } = body as {
+    const { url, caption, width, height, category, eventDate } = body as {
       url?: string;
       caption?: string;
       width?: number;
       height?: number;
       category?: string;
+      eventDate?: string;
     };
 
     if (!url) {
       return NextResponse.json({ error: 'Image URL is required' }, { status: 400 });
+    }
+
+    let parsedEventDate: Date | null = null;
+    if (eventDate) {
+      const d = new Date(eventDate);
+      if (Number.isNaN(d.valueOf())) {
+        return NextResponse.json({ error: 'Invalid eventDate' }, { status: 400 });
+      }
+      parsedEventDate = d;
     }
 
     const image = await prisma.galleryImage.create({
@@ -58,6 +68,7 @@ export async function POST(request: NextRequest) {
         width: typeof width === 'number' ? width : undefined,
         height: typeof height === 'number' ? height : undefined,
         category: category || null,
+        eventDate: parsedEventDate,
       },
     });
 

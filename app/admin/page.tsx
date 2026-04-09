@@ -46,6 +46,28 @@ interface GalleryImage {
   width: number;
   height: number;
   category: string | null;
+  eventDate?: string | null;
+  createdAt: string;
+}
+
+interface AnnualReport {
+  id: string;
+  title: string;
+  description: string | null;
+  year: number | null;
+  fileUrl: string;
+  publishedAt: string;
+  createdAt: string;
+}
+
+interface EventItem {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  location: string | null;
+  image: string | null;
+  status: string;
   createdAt: string;
 }
 
@@ -71,11 +93,13 @@ export default function AdminDashboard() {
   const [heroPosts, setHeroPosts] = useState<HeroPost[]>([]);
   const [magazines, setMagazines] = useState<Magazine[]>([]);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
+  const [reports, setReports] = useState<AnnualReport[]>([]);
+  const [events, setEvents] = useState<EventItem[]>([]);
 
   // Delete Confirmation State
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
     isOpen: boolean;
-    type: 'post' | 'hero' | 'magazine' | 'gallery' | null;
+    type: 'post' | 'hero' | 'magazine' | 'gallery' | 'report' | 'event' | null;
     id: string | null;
   }>({
     isOpen: false,
@@ -89,14 +113,18 @@ export default function AdminDashboard() {
   const [showMagazineModal, setShowMagazineModal] = useState(false);
   const [showCreateUserModal, setShowCreateUserModal] = useState(false);
   const [showGalleryModal, setShowGalleryModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [showEventModal, setShowEventModal] = useState(false);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [editingHeroPost, setEditingHeroPost] = useState<HeroPost | null>(null);
   const [editingMagazine, setEditingMagazine] = useState<Magazine | null>(null);
   const [editingGalleryImage, setEditingGalleryImage] = useState<GalleryImage | null>(null);
+  const [editingReport, setEditingReport] = useState<AnnualReport | null>(null);
+  const [editingEvent, setEditingEvent] = useState<EventItem | null>(null);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [activeTab, setActiveTab] = useState<'blog' | 'users' | 'hero' | 'magazines' | 'gallery'>('blog');
+  const [activeTab, setActiveTab] = useState<'blog' | 'users' | 'hero' | 'magazines' | 'gallery' | 'reports' | 'events'>('blog');
 
   const [formData, setFormData] = useState({
     title: '',
@@ -130,6 +158,24 @@ export default function AdminDashboard() {
     category: '',
     width: 800,
     height: 600,
+    eventDate: '',
+  });
+
+  const [reportFormData, setReportFormData] = useState({
+    title: '',
+    description: '',
+    year: '',
+    fileUrl: '',
+    publishedAt: '',
+  });
+
+  const [eventFormData, setEventFormData] = useState({
+    title: '',
+    description: '',
+    date: '',
+    location: '',
+    image: '',
+    status: 'UPCOMING',
   });
 
   const [createUserFormData, setCreateUserFormData] = useState({
@@ -157,6 +203,10 @@ export default function AdminDashboard() {
         fetchMagazines();
       } else if (activeTab === 'gallery') {
         fetchGalleryImages();
+      } else if (activeTab === 'reports') {
+        fetchReports();
+      } else if (activeTab === 'events') {
+        fetchEvents();
       }
     }
   }, [session, search, categoryFilter, statusFilter, activeTab]);
@@ -259,6 +309,42 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchReports = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/reports');
+      if (response.ok) {
+        const data = await response.json();
+        setReports(data);
+      } else {
+        toast.error('Failed to fetch reports');
+      }
+    } catch (error) {
+      console.error('Error fetching reports:', error);
+      toast.error('Error loading reports');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/events');
+      if (response.ok) {
+        const data = await response.json();
+        setEvents(data);
+      } else {
+        toast.error('Failed to fetch events');
+      }
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      toast.error('Error loading events');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCreate = () => {
     setEditingPost(null);
     setFormData({
@@ -347,6 +433,7 @@ export default function AdminDashboard() {
       category: '',
       width: 800,
       height: 600,
+      eventDate: '',
     });
     setShowGalleryModal(true);
   };
@@ -359,8 +446,59 @@ export default function AdminDashboard() {
       category: image.category || '',
       width: image.width || 800,
       height: image.height || 600,
+      eventDate: image.eventDate ? image.eventDate.slice(0, 10) : '',
     });
     setShowGalleryModal(true);
+  };
+
+  const handleCreateReport = () => {
+    setEditingReport(null);
+    setReportFormData({
+      title: '',
+      description: '',
+      year: '',
+      fileUrl: '',
+      publishedAt: '',
+    });
+    setShowReportModal(true);
+  };
+
+  const handleEditReport = (report: AnnualReport) => {
+    setEditingReport(report);
+    setReportFormData({
+      title: report.title,
+      description: report.description || '',
+      year: report.year ? String(report.year) : '',
+      fileUrl: report.fileUrl,
+      publishedAt: report.publishedAt ? report.publishedAt.slice(0, 10) : '',
+    });
+    setShowReportModal(true);
+  };
+
+  const handleCreateEvent = () => {
+    setEditingEvent(null);
+    setEventFormData({
+      title: '',
+      description: '',
+      date: '',
+      location: '',
+      image: '',
+      status: 'UPCOMING',
+    });
+    setShowEventModal(true);
+  };
+
+  const handleEditEvent = (event: EventItem) => {
+    setEditingEvent(event);
+    setEventFormData({
+      title: event.title,
+      description: event.description || '',
+      date: event.date ? event.date.slice(0, 16) : '',
+      location: event.location || '',
+      image: event.image || '',
+      status: event.status || 'UPCOMING',
+    });
+    setShowEventModal(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -429,6 +567,14 @@ export default function AdminDashboard() {
     setDeleteConfirmation({ isOpen: true, type: 'gallery', id });
   };
 
+  const handleDeleteReport = async (id: string) => {
+    setDeleteConfirmation({ isOpen: true, type: 'report', id });
+  };
+
+  const handleDeleteEvent = async (id: string) => {
+    setDeleteConfirmation({ isOpen: true, type: 'event', id });
+  };
+
   const confirmDeleteMagazine = async () => {
     const id = deleteConfirmation.id;
     if (!id) return;
@@ -474,6 +620,48 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Error deleting gallery image:', error);
       toast.error('Error deleting image', { id: loadingToast });
+    } finally {
+      setDeleteConfirmation({ isOpen: false, type: null, id: null });
+    }
+  };
+
+  const confirmDeleteReport = async () => {
+    const id = deleteConfirmation.id;
+    if (!id) return;
+
+    const loadingToast = toast.loading('Deleting report...');
+    try {
+      const response = await fetch(`/api/reports/${id}`, { method: 'DELETE' });
+      if (response.ok) {
+        toast.success('Report deleted', { id: loadingToast });
+        fetchReports();
+      } else {
+        toast.error('Failed to delete report', { id: loadingToast });
+      }
+    } catch (error) {
+      console.error('Error deleting report:', error);
+      toast.error('Error deleting report', { id: loadingToast });
+    } finally {
+      setDeleteConfirmation({ isOpen: false, type: null, id: null });
+    }
+  };
+
+  const confirmDeleteEvent = async () => {
+    const id = deleteConfirmation.id;
+    if (!id) return;
+
+    const loadingToast = toast.loading('Deleting event...');
+    try {
+      const response = await fetch(`/api/events/${id}`, { method: 'DELETE' });
+      if (response.ok) {
+        toast.success('Event deleted', { id: loadingToast });
+        fetchEvents();
+      } else {
+        toast.error('Failed to delete event', { id: loadingToast });
+      }
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      toast.error('Error deleting event', { id: loadingToast });
     } finally {
       setDeleteConfirmation({ isOpen: false, type: null, id: null });
     }
@@ -634,6 +822,7 @@ export default function AdminDashboard() {
           category: galleryFormData.category,
           width: Number(galleryFormData.width),
           height: Number(galleryFormData.height),
+          eventDate: galleryFormData.eventDate || null,
         }),
       });
 
@@ -648,6 +837,75 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Error saving gallery image:', error);
       toast.error('Error saving image', { id: loadingToast });
+    }
+  };
+
+  const handleReportSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const loadingToast = toast.loading(editingReport ? 'Updating report...' : 'Creating report...');
+
+    try {
+      const url = editingReport ? `/api/reports/${editingReport.id}` : '/api/reports';
+      const method = editingReport ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: reportFormData.title,
+          description: reportFormData.description,
+          year: reportFormData.year ? Number(reportFormData.year) : null,
+          fileUrl: reportFormData.fileUrl,
+          publishedAt: reportFormData.publishedAt || null,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success(editingReport ? 'Report updated!' : 'Report created!', { id: loadingToast });
+        setShowReportModal(false);
+        fetchReports();
+      } else {
+        const error = await response.json().catch(() => ({}));
+        toast.error(error.error || 'Failed to save report', { id: loadingToast });
+      }
+    } catch (error) {
+      console.error('Error saving report:', error);
+      toast.error('Error saving report', { id: loadingToast });
+    }
+  };
+
+  const handleEventSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const loadingToast = toast.loading(editingEvent ? 'Updating event...' : 'Creating event...');
+
+    try {
+      const url = editingEvent ? `/api/events/${editingEvent.id}` : '/api/events';
+      const method = editingEvent ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: eventFormData.title,
+          description: eventFormData.description,
+          date: eventFormData.date,
+          location: eventFormData.location || null,
+          image: eventFormData.image || null,
+          status: eventFormData.status,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success(editingEvent ? 'Event updated!' : 'Event created!', { id: loadingToast });
+        setShowEventModal(false);
+        fetchEvents();
+      } else {
+        const error = await response.json().catch(() => ({}));
+        toast.error(error.error || 'Failed to save event', { id: loadingToast });
+      }
+    } catch (error) {
+      console.error('Error saving event:', error);
+      toast.error('Error saving event', { id: loadingToast });
     }
   };
 
@@ -784,6 +1042,26 @@ export default function AdminDashboard() {
             >
               <span className="material-symbols-outlined text-[20px]">photo_library</span>
               Gallery
+            </button>
+            <button
+              onClick={() => setActiveTab('reports')}
+              className={`flex items-center gap-2 px-4 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'reports'
+                ? 'border-primary text-primary dark:text-blue-400'
+                : 'border-transparent text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white hover:border-gray-300'
+                }`}
+            >
+              <span className="material-symbols-outlined text-[20px]">description</span>
+              Annual Reports
+            </button>
+            <button
+              onClick={() => setActiveTab('events')}
+              className={`flex items-center gap-2 px-4 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'events'
+                ? 'border-primary text-primary dark:text-blue-400'
+                : 'border-transparent text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white hover:border-gray-300'
+                }`}
+            >
+              <span className="material-symbols-outlined text-[20px]">event</span>
+              Upcoming Events
             </button>
             {(session.user as any).role === 'SUPER_ADMIN' && (
               <button
@@ -1208,7 +1486,183 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                         <div className="text-xs text-slate-400">
-                          Added: {new Date(img.createdAt).toLocaleDateString()}
+                          Date: {new Date(img.eventDate || img.createdAt).toLocaleDateString()}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </>
+          )}
+
+          {activeTab === 'reports' && (
+            <>
+              <header className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-[#101018] dark:text-white text-3xl font-bold tracking-tight">
+                    Annual Reports
+                  </h2>
+                  <p className="text-[#5e5f8d] dark:text-gray-400 mt-1 text-sm">
+                    Upload and manage PDF annual reports.
+                  </p>
+                </div>
+                <button
+                  onClick={handleCreateReport}
+                  className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                >
+                  <span className="material-symbols-outlined mr-2 text-[20px]">note_add</span>
+                  Add Report
+                </button>
+              </header>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {reports.length === 0 ? (
+                  <div className="col-span-full rounded-xl border border-[#dadae7] dark:border-gray-700 bg-white dark:bg-[#1a1a2e] p-8 text-center text-[#5e5f8d] dark:text-gray-400">
+                    No reports found
+                  </div>
+                ) : (
+                  reports.map((report) => (
+                    <div
+                      key={report.id}
+                      className="rounded-xl border border-[#dadae7] dark:border-gray-700 bg-white dark:bg-[#1a1a2e] shadow-sm overflow-hidden"
+                    >
+                      <div className="p-5 flex flex-col gap-2">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex flex-col gap-0.5 min-w-0">
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-white leading-tight line-clamp-1">
+                              {report.title}
+                            </h3>
+                            <p className="text-xs text-slate-400">
+                              {report.year ? `Year: ${report.year}` : 'Year: —'}
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEditReport(report)}
+                              className="p-1.5 text-slate-400 hover:text-primary hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg transition-colors"
+                              title="Edit"
+                            >
+                              <span className="material-symbols-outlined text-[20px]">edit</span>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteReport(report.id)}
+                              className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
+                              title="Delete"
+                            >
+                              <span className="material-symbols-outlined text-[20px]">delete</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        {report.description && (
+                          <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-3">
+                            {report.description}
+                          </p>
+                        )}
+
+                        <div className="flex items-center justify-between mt-2">
+                          <div className="text-xs text-slate-400">
+                            Published: {new Date(report.publishedAt).toLocaleDateString()}
+                          </div>
+                          <a
+                            href={report.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-semibold text-primary hover:underline"
+                          >
+                            View PDF
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </>
+          )}
+
+          {activeTab === 'events' && (
+            <>
+              <header className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-[#101018] dark:text-white text-3xl font-bold tracking-tight">
+                    Upcoming Events
+                  </h2>
+                  <p className="text-[#5e5f8d] dark:text-gray-400 mt-1 text-sm">
+                    Add and manage public events.
+                  </p>
+                </div>
+                <button
+                  onClick={handleCreateEvent}
+                  className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                >
+                  <span className="material-symbols-outlined mr-2 text-[20px]">add</span>
+                  Add Event
+                </button>
+              </header>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {events.length === 0 ? (
+                  <div className="col-span-full rounded-xl border border-[#dadae7] dark:border-gray-700 bg-white dark:bg-[#1a1a2e] p-8 text-center text-[#5e5f8d] dark:text-gray-400">
+                    No events found
+                  </div>
+                ) : (
+                  events.map((event) => (
+                    <div
+                      key={event.id}
+                      className="rounded-xl border border-[#dadae7] dark:border-gray-700 bg-white dark:bg-[#1a1a2e] shadow-sm overflow-hidden"
+                    >
+                      {event.image ? (
+                        <div className="w-full h-40 bg-slate-100 dark:bg-black/20 overflow-hidden relative">
+                          <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
+                        </div>
+                      ) : (
+                        <div className="w-full h-40 bg-slate-100 dark:bg-black/20 flex items-center justify-center text-slate-300">
+                          <span className="material-symbols-outlined text-[48px]">event</span>
+                        </div>
+                      )}
+
+                      <div className="p-5 flex flex-col gap-2">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex flex-col gap-0.5 min-w-0">
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-white leading-tight line-clamp-1">
+                              {event.title}
+                            </h3>
+                            <p className="text-xs text-slate-400">
+                              {new Date(event.date).toLocaleString()}
+                              {event.location ? ` • ${event.location}` : ''}
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEditEvent(event)}
+                              className="p-1.5 text-slate-400 hover:text-primary hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg transition-colors"
+                              title="Edit"
+                            >
+                              <span className="material-symbols-outlined text-[20px]">edit</span>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteEvent(event.id)}
+                              className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
+                              title="Delete"
+                            >
+                              <span className="material-symbols-outlined text-[20px]">delete</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-3">
+                          {event.description}
+                        </p>
+
+                        <div className="mt-2">
+                          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border ${event.status === 'UPCOMING'
+                            ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'
+                            : 'bg-gray-50 dark:bg-gray-900/30 text-gray-700 dark:text-gray-400 border-gray-200 dark:border-gray-800'
+                            }`}>
+                            {event.status}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -1626,12 +2080,35 @@ export default function AdminDashboard() {
                 <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
                   Category
                 </label>
-                <input
-                  type="text"
+                <select
                   value={galleryFormData.category}
                   onChange={(e) => setGalleryFormData({ ...galleryFormData, category: e.target.value })}
                   className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="">Select category…</option>
+                  <option value="Event">Event</option>
+                  <option value="Workshop">Workshop</option>
+                  <option value="Conference">Conference</option>
+                  <option value="MUN">MUN</option>
+                  <option value="SDG">SDG</option>
+                  <option value="Outreach">Outreach</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Event / Posted Date
+                </label>
+                <input
+                  type="date"
+                  value={galleryFormData.eventDate}
+                  onChange={(e) => setGalleryFormData({ ...galleryFormData, eventDate: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
+                <p className="text-xs text-[#5e5f8d] dark:text-gray-400 mt-1">
+                  Optional. If empty, the system uses the upload date.
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -1675,6 +2152,220 @@ export default function AdminDashboard() {
                   className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors disabled:opacity-50"
                 >
                   {editingGalleryImage ? 'Update Image' : 'Add Image'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showReportModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+          <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-[#101018] dark:text-white">
+                {editingReport ? 'Edit Report' : 'Add Report'}
+              </h3>
+              <button
+                onClick={() => setShowReportModal(false)}
+                className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleReportSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Title *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={reportFormData.title}
+                  onChange={(e) => setReportFormData({ ...reportFormData, title: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Year
+                  </label>
+                  <input
+                    type="number"
+                    min={1900}
+                    max={3000}
+                    value={reportFormData.year}
+                    onChange={(e) => setReportFormData({ ...reportFormData, year: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Published Date
+                  </label>
+                  <input
+                    type="date"
+                    value={reportFormData.publishedAt}
+                    onChange={(e) => setReportFormData({ ...reportFormData, publishedAt: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  PDF *
+                </label>
+                <PdfUpload
+                  value={reportFormData.fileUrl}
+                  onChange={(url) => setReportFormData({ ...reportFormData, fileUrl: url })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Description
+                </label>
+                <textarea
+                  rows={4}
+                  value={reportFormData.description}
+                  onChange={(e) => setReportFormData({ ...reportFormData, description: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowReportModal(false)}
+                  className="px-4 py-2 text-sm font-semibold text-[#5e5f8d] dark:text-gray-400 hover:bg-[#f0f0f5] dark:hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!reportFormData.title || !reportFormData.fileUrl}
+                  className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {editingReport ? 'Update Report' : 'Add Report'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showEventModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+          <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-[#101018] dark:text-white">
+                {editingEvent ? 'Edit Event' : 'Add Event'}
+              </h3>
+              <button
+                onClick={() => setShowEventModal(false)}
+                className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleEventSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Title *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={eventFormData.title}
+                  onChange={(e) => setEventFormData({ ...eventFormData, title: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Date & Time *
+                  </label>
+                  <input
+                    type="datetime-local"
+                    required
+                    value={eventFormData.date}
+                    onChange={(e) => setEventFormData({ ...eventFormData, date: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    value={eventFormData.location}
+                    onChange={(e) => setEventFormData({ ...eventFormData, location: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Status
+                  </label>
+                  <select
+                    value={eventFormData.status}
+                    onChange={(e) => setEventFormData({ ...eventFormData, status: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  >
+                    <option value="UPCOMING">UPCOMING</option>
+                    <option value="ONGOING">ONGOING</option>
+                    <option value="COMPLETED">COMPLETED</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Image
+                  </label>
+                  <ImageUpload
+                    value={eventFormData.image}
+                    onChange={(url) => setEventFormData({ ...eventFormData, image: url })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Description *
+                </label>
+                <textarea
+                  required
+                  rows={5}
+                  value={eventFormData.description}
+                  onChange={(e) => setEventFormData({ ...eventFormData, description: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowEventModal(false)}
+                  className="px-4 py-2 text-sm font-semibold text-[#5e5f8d] dark:text-gray-400 hover:bg-[#f0f0f5] dark:hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!eventFormData.title || !eventFormData.date || !eventFormData.description}
+                  className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {editingEvent ? 'Update Event' : 'Add Event'}
                 </button>
               </div>
             </form>
@@ -1913,6 +2604,8 @@ export default function AdminDashboard() {
                     else if (deleteConfirmation.type === 'hero') confirmDeleteHero();
                     else if (deleteConfirmation.type === 'magazine') confirmDeleteMagazine();
                     else if (deleteConfirmation.type === 'gallery') confirmDeleteGalleryImage();
+                    else if (deleteConfirmation.type === 'report') confirmDeleteReport();
+                    else if (deleteConfirmation.type === 'event') confirmDeleteEvent();
                   }}
                   className="px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
                 >

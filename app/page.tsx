@@ -13,6 +13,23 @@ export default async function Home() {
     <>
       <Navigation />
       <main>
+        {announcements.length > 0 && (
+          <section className="bg-slate-900 border-b border-white/10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full bg-primary/20 border border-primary/30 px-3 py-1 text-xs font-black uppercase tracking-widest text-primary animate-pulse">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                Announcement
+              </span>
+              <Link
+                href={`/announcements/${announcements[0].id}`}
+                className="text-white font-semibold text-sm md:text-base hover:underline line-clamp-1"
+              >
+                {announcements[0].title}
+              </Link>
+            </div>
+          </section>
+        )}
+
         {/* Hero Section */}
         <section className="relative w-full min-h-[600px] flex items-center overflow-hidden">
           <div className="absolute inset-0 z-0">

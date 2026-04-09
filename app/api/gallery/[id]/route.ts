@@ -17,17 +17,31 @@ export async function PUT(
 
     const { id } = await params;
     const body = await request.json();
-    const { url, caption, width, height, category } = body as {
+    const { url, caption, width, height, category, eventDate } = body as {
       url?: string;
       caption?: string | null;
       width?: number;
       height?: number;
       category?: string | null;
+      eventDate?: string | null;
     };
 
     const existing = await prisma.galleryImage.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json({ error: 'Image not found' }, { status: 404 });
+    }
+
+    let parsedEventDate: Date | null | undefined = undefined;
+    if (eventDate !== undefined) {
+      if (eventDate === null || eventDate === '') {
+        parsedEventDate = null;
+      } else {
+        const d = new Date(eventDate);
+        if (Number.isNaN(d.valueOf())) {
+          return NextResponse.json({ error: 'Invalid eventDate' }, { status: 400 });
+        }
+        parsedEventDate = d;
+      }
     }
 
     const image = await prisma.galleryImage.update({
@@ -38,6 +52,7 @@ export async function PUT(
         width: typeof width === 'number' ? width : undefined,
         height: typeof height === 'number' ? height : undefined,
         category: category ?? undefined,
+        eventDate: parsedEventDate,
       },
     });
 

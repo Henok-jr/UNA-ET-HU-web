@@ -166,9 +166,31 @@ model GalleryImage {
   width       Int      @default(800)
   height      Int      @default(600)
   category    String?  // e.g., "Event", "Workshop"
+  eventDate   DateTime? @map("event_date")
   createdAt   DateTime @default(now()) @map("created_at")
   
   @@map("gallery_images")
+}
+
+model AnnualReport {
+  id          String   @id @default(cuid())
+  title       String
+  description String?  @db.Text
+  year        Int?
+  fileUrl     String   @map("file_url")
+  publishedAt DateTime @default(now()) @map("published_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("annual_reports")
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("newsletter_subscribers")
 }
 
 model HeroPost {
