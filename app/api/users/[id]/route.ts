@@ -61,7 +61,8 @@ export async function PUT(
         const body = await request.json();
         const { role } = body;
 
-        if (!['ADMIN', 'MEMBER'].includes(role)) {
+        const normalizedRole = typeof role === 'string' ? role.toUpperCase() : '';
+        if (!['SUPER_ADMIN', 'ADMIN', 'MEMBER', 'GUEST'].includes(normalizedRole)) {
             return NextResponse.json(
                 { error: 'Invalid role' },
                 { status: 400 }
@@ -78,7 +79,7 @@ export async function PUT(
 
         const user = await prisma.user.update({
             where: { id },
-            data: { role },
+            data: { role: normalizedRole as any },
         });
 
         return NextResponse.json(user);

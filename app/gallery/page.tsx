@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { ChevronDown, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,25 @@ import Footer from "../components/Footer";
 
 // --- Components ---
 
-const categories = ["All", "MUN", "Outreach", "SDGs"];
+interface GalleryImage {
+    id: string;
+    url: string;
+    caption: string | null;
+    width: number;
+    height: number;
+    category: string | null;
+    createdAt: string;
+}
 
-function GalleryHeader({ activeCategory, setActiveCategory }: { activeCategory: string, setActiveCategory: (c: string) => void }) {
+function GalleryHeader({
+    categories,
+    activeCategory,
+    setActiveCategory,
+}: {
+    categories: string[];
+    activeCategory: string;
+    setActiveCategory: (c: string) => void;
+}) {
     return (
         <section className="py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
@@ -44,62 +60,23 @@ function GalleryHeader({ activeCategory, setActiveCategory }: { activeCategory: 
         </section>
     );
 }
-
-const galleryImages = [
-    {
-        id: 1,
-        src: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=80",
-        alt: "Students in diplomatic debate",
-        category: "MUN",
-        height: "tall",
-    },
-    {
-        id: 2,
-        src: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80",
-        alt: "Planning session with sticky notes",
-        category: "Outreach",
-        height: "medium",
-    },
-    {
-        id: 3,
-        src: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800&q=80",
-        alt: "Sustainability planting initiative",
-        category: "SDGs",
-        height: "short",
-    },
-    {
-        id: 4,
-        src: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80",
-        alt: "Public speaking at conference",
-        category: "MUN",
-        height: "tall",
-    },
-    {
-        id: 5,
-        src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
-        alt: "Community hiking activity",
-        category: "Outreach",
-        height: "tall",
-    },
-    {
-        id: 6,
-        src: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=800&q=80",
-        alt: "Blood donation drive",
-        category: "SDGs",
-        height: "medium",
-    },
-];
-
-function GalleryGrid({ activeCategory }: { activeCategory: string }) {
-    const [showScrollTop, setShowScrollTop] = useState(false);
-
+function GalleryGrid({ activeCategory, images }: { activeCategory: string, images: GalleryImage[] }) {
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const filteredImages = activeCategory === "All"
-        ? galleryImages
-        : galleryImages.filter(img => img.category === activeCategory);
+        ? images
+        : images.filter(img => img.category === activeCategory);
+
+    const getHeightClass = (img: GalleryImage) => {
+        const w = img.width || 1;
+        const h = img.height || 1;
+        const ratio = h / w;
+        if (ratio >= 1.25) return 'h-96';
+        if (ratio >= 0.9) return 'h-72';
+        return 'h-48';
+    };
 
     return (
         <section className="pb-20 px-4 sm:px-6 lg:px-8">
@@ -112,16 +89,11 @@ function GalleryGrid({ activeCategory }: { activeCategory: string }) {
                             className="break-inside-avoid relative group overflow-hidden rounded-xl"
                         >
                             <div
-                                className={`relative ${image.height === "tall"
-                                    ? "h-96"
-                                    : image.height === "medium"
-                                        ? "h-72"
-                                        : "h-48"
-                                    }`}
+                                className={`relative ${getHeightClass(image)}`}
                             >
                                 <Image
-                                    src={image.src || "/placeholder.svg"}
-                                    alt={image.alt}
+                                    src={image.url || "/placeholder.svg"}
+                                    alt={image.caption || "Gallery image"}
                                     fill
                                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                                 />
@@ -156,13 +128,52 @@ function GalleryGrid({ activeCategory }: { activeCategory: string }) {
 
 export default function GalleryPage() {
     const [activeCategory, setActiveCategory] = useState("All");
+    const [images, setImages] = useState<GalleryImage[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const load = async () => {
+            try {
+                setLoading(true);
+                const res = await fetch('/api/gallery');
+                if (!res.ok) throw new Error('Failed to load gallery');
+                const data = await res.json();
+                if (isMounted) setImages(data);
+            } catch (e) {
+                console.error(e);
+                if (isMounted) setImages([]);
+            } finally {
+                if (isMounted) setLoading(false);
+            }
+        };
+
+        load();
+        return () => { isMounted = false; };
+    }, []);
+
+    const categories = useMemo(() => {
+        const set = new Set<string>();
+        for (const img of images) {
+            if (img.category) set.add(img.category);
+        }
+        return ['All', ...Array.from(set)];
+    }, [images]);
 
     return (
         <>
             <Navigation />
             <main>
-                <GalleryHeader activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
-                <GalleryGrid activeCategory={activeCategory} />
+                <GalleryHeader categories={categories} activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
+
+                {loading ? (
+                    <section className="pb-20 px-4 sm:px-6 lg:px-8">
+                        <div className="max-w-7xl mx-auto text-center text-muted-foreground">Loading...</div>
+                    </section>
+                ) : (
+                    <GalleryGrid activeCategory={activeCategory} images={images} />
+                )}
             </main>
             <Footer />
         </>

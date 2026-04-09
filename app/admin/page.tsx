@@ -39,6 +39,16 @@ interface Magazine {
   publishedAt: string;
 }
 
+interface GalleryImage {
+  id: string;
+  url: string;
+  caption: string | null;
+  width: number;
+  height: number;
+  category: string | null;
+  createdAt: string;
+}
+
 interface User {
   id: string;
   fullName: string;
@@ -60,11 +70,12 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState<User[]>([]);
   const [heroPosts, setHeroPosts] = useState<HeroPost[]>([]);
   const [magazines, setMagazines] = useState<Magazine[]>([]);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
 
   // Delete Confirmation State
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
     isOpen: boolean;
-    type: 'post' | 'hero' | 'magazine' | null;
+    type: 'post' | 'hero' | 'magazine' | 'gallery' | null;
     id: string | null;
   }>({
     isOpen: false,
@@ -76,13 +87,16 @@ export default function AdminDashboard() {
   const [showModal, setShowModal] = useState(false);
   const [showHeroModal, setShowHeroModal] = useState(false);
   const [showMagazineModal, setShowMagazineModal] = useState(false);
+  const [showCreateUserModal, setShowCreateUserModal] = useState(false);
+  const [showGalleryModal, setShowGalleryModal] = useState(false);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [editingHeroPost, setEditingHeroPost] = useState<HeroPost | null>(null);
   const [editingMagazine, setEditingMagazine] = useState<Magazine | null>(null);
+  const [editingGalleryImage, setEditingGalleryImage] = useState<GalleryImage | null>(null);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [activeTab, setActiveTab] = useState<'blog' | 'users' | 'hero' | 'magazines'>('blog');
+  const [activeTab, setActiveTab] = useState<'blog' | 'users' | 'hero' | 'magazines' | 'gallery'>('blog');
 
   const [formData, setFormData] = useState({
     title: '',
@@ -110,6 +124,21 @@ export default function AdminDashboard() {
     pdfUrl: '',
   });
 
+  const [galleryFormData, setGalleryFormData] = useState({
+    url: '',
+    caption: '',
+    category: '',
+    width: 800,
+    height: 600,
+  });
+
+  const [createUserFormData, setCreateUserFormData] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    role: 'MEMBER' as User['role'],
+  });
+
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/auth/signin');
@@ -126,6 +155,8 @@ export default function AdminDashboard() {
         fetchHeroPosts();
       } else if (activeTab === 'magazines') {
         fetchMagazines();
+      } else if (activeTab === 'gallery') {
+        fetchGalleryImages();
       }
     }
   }, [session, search, categoryFilter, statusFilter, activeTab]);
@@ -205,6 +236,24 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Error fetching magazines:', error);
       toast.error('Error loading magazines');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchGalleryImages = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/gallery');
+      if (response.ok) {
+        const data = await response.json();
+        setGalleryImages(data);
+      } else {
+        toast.error('Failed to fetch gallery images');
+      }
+    } catch (error) {
+      console.error('Error fetching gallery images:', error);
+      toast.error('Error loading gallery');
     } finally {
       setLoading(false);
     }
@@ -290,6 +339,30 @@ export default function AdminDashboard() {
     setShowMagazineModal(true);
   };
 
+  const handleCreateGalleryImage = () => {
+    setEditingGalleryImage(null);
+    setGalleryFormData({
+      url: '',
+      caption: '',
+      category: '',
+      width: 800,
+      height: 600,
+    });
+    setShowGalleryModal(true);
+  };
+
+  const handleEditGalleryImage = (image: GalleryImage) => {
+    setEditingGalleryImage(image);
+    setGalleryFormData({
+      url: image.url,
+      caption: image.caption || '',
+      category: image.category || '',
+      width: image.width || 800,
+      height: image.height || 600,
+    });
+    setShowGalleryModal(true);
+  };
+
   const handleDelete = async (id: string) => {
     setDeleteConfirmation({ isOpen: true, type: 'post', id });
   };
@@ -352,6 +425,10 @@ export default function AdminDashboard() {
     setDeleteConfirmation({ isOpen: true, type: 'magazine', id });
   };
 
+  const handleDeleteGalleryImage = async (id: string) => {
+    setDeleteConfirmation({ isOpen: true, type: 'gallery', id });
+  };
+
   const confirmDeleteMagazine = async () => {
     const id = deleteConfirmation.id;
     if (!id) return;
@@ -372,6 +449,31 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Error deleting magazine:', error);
       toast.error('Error deleting magazine', { id: loadingToast });
+    } finally {
+      setDeleteConfirmation({ isOpen: false, type: null, id: null });
+    }
+  };
+
+  const confirmDeleteGalleryImage = async () => {
+    const id = deleteConfirmation.id;
+    if (!id) return;
+
+    const loadingToast = toast.loading('Deleting image...');
+
+    try {
+      const response = await fetch(`/api/gallery/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        toast.success('Image deleted successfully', { id: loadingToast });
+        fetchGalleryImages();
+      } else {
+        toast.error('Failed to delete image', { id: loadingToast });
+      }
+    } catch (error) {
+      console.error('Error deleting gallery image:', error);
+      toast.error('Error deleting image', { id: loadingToast });
     } finally {
       setDeleteConfirmation({ isOpen: false, type: null, id: null });
     }
@@ -515,6 +617,40 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleGallerySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const loadingToast = toast.loading(editingGalleryImage ? 'Updating image...' : 'Adding image...');
+
+    try {
+      const url = editingGalleryImage ? `/api/gallery/${editingGalleryImage.id}` : '/api/gallery';
+      const method = editingGalleryImage ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          url: galleryFormData.url,
+          caption: galleryFormData.caption,
+          category: galleryFormData.category,
+          width: Number(galleryFormData.width),
+          height: Number(galleryFormData.height),
+        }),
+      });
+
+      if (response.ok) {
+        toast.success(editingGalleryImage ? 'Image updated!' : 'Image added!', { id: loadingToast });
+        setShowGalleryModal(false);
+        fetchGalleryImages();
+      } else {
+        const error = await response.json().catch(() => ({}));
+        toast.error(error.error || 'Failed to save image', { id: loadingToast });
+      }
+    } catch (error) {
+      console.error('Error saving gallery image:', error);
+      toast.error('Error saving image', { id: loadingToast });
+    }
+  };
+
   const handleDeleteUser = async (id: string) => {
     if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) return;
     const loadingToast = toast.loading('Deleting user...');
@@ -556,6 +692,37 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Error updating user role:', error);
       toast.error('Error updating user role', { id: loadingToast });
+    }
+  };
+
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const loadingToast = toast.loading('Creating user...');
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(createUserFormData),
+      });
+
+      if (response.ok) {
+        toast.success('User created successfully', { id: loadingToast });
+        setShowCreateUserModal(false);
+        setCreateUserFormData({
+          fullName: '',
+          email: '',
+          password: '',
+          role: 'MEMBER',
+        });
+        fetchUsers();
+      } else {
+        const error = await response.json().catch(() => ({}));
+        toast.error(error.error || 'Failed to create user', { id: loadingToast });
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
+      toast.error('Error creating user', { id: loadingToast });
     }
   };
 
@@ -607,6 +774,16 @@ export default function AdminDashboard() {
             >
               <span className="material-symbols-outlined text-[20px]">menu_book</span>
               Magazines
+            </button>
+            <button
+              onClick={() => setActiveTab('gallery')}
+              className={`flex items-center gap-2 px-4 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'gallery'
+                ? 'border-primary text-primary dark:text-blue-400'
+                : 'border-transparent text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white hover:border-gray-300'
+                }`}
+            >
+              <span className="material-symbols-outlined text-[20px]">photo_library</span>
+              Gallery
             </button>
             {(session.user as any).role === 'SUPER_ADMIN' && (
               <button
@@ -968,6 +1145,79 @@ export default function AdminDashboard() {
             </>
           )}
 
+          {activeTab === 'gallery' && (
+            <>
+              <header className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-[#101018] dark:text-white text-3xl font-bold tracking-tight">
+                    Gallery Management
+                  </h2>
+                  <p className="text-[#5e5f8d] dark:text-gray-400 mt-1 text-sm">
+                    Add and manage gallery images.
+                  </p>
+                </div>
+                <button
+                  onClick={handleCreateGalleryImage}
+                  className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                >
+                  <span className="material-symbols-outlined mr-2 text-[20px]">add_photo_alternate</span>
+                  Add Image
+                </button>
+              </header>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {galleryImages.length === 0 ? (
+                  <div className="col-span-full rounded-xl border border-[#dadae7] dark:border-gray-700 bg-white dark:bg-[#1a1a2e] p-8 text-center text-[#5e5f8d] dark:text-gray-400">
+                    No gallery images found
+                  </div>
+                ) : (
+                  galleryImages.map((img) => (
+                    <div
+                      key={img.id}
+                      className="rounded-xl border border-[#dadae7] dark:border-gray-700 bg-white dark:bg-[#1a1a2e] shadow-sm overflow-hidden"
+                    >
+                      <div className="w-full h-48 bg-slate-100 dark:bg-black/20 overflow-hidden relative">
+                        <img src={img.url} alt={img.caption || 'Gallery image'} className="w-full h-full object-cover" />
+                      </div>
+
+                      <div className="p-5 flex flex-col gap-2">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex flex-col gap-0.5">
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-white leading-tight line-clamp-1">
+                              {img.caption || 'Untitled'}
+                            </h3>
+                            <p className="text-xs text-slate-400">
+                              {img.category ? `Category: ${img.category}` : 'Category: —'}
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEditGalleryImage(img)}
+                              className="p-1.5 text-slate-400 hover:text-primary hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg transition-colors"
+                              title="Edit"
+                            >
+                              <span className="material-symbols-outlined text-[20px]">edit</span>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteGalleryImage(img.id)}
+                              className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-colors"
+                              title="Delete"
+                            >
+                              <span className="material-symbols-outlined text-[20px]">delete</span>
+                            </button>
+                          </div>
+                        </div>
+                        <div className="text-xs text-slate-400">
+                          Added: {new Date(img.createdAt).toLocaleDateString()}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </>
+          )}
+
           {activeTab === 'users' && (
             <>
               <header className="flex flex-wrap items-center justify-between gap-4">
@@ -979,6 +1229,13 @@ export default function AdminDashboard() {
                     Manage users, admins, and their roles.
                   </p>
                 </div>
+                <button
+                  onClick={() => setShowCreateUserModal(true)}
+                  className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                >
+                  <span className="material-symbols-outlined mr-2 text-[20px]">person_add</span>
+                  Create User
+                </button>
               </header>
 
               <div className="flex flex-wrap items-center gap-4 rounded-xl border border-[#dadae7] dark:border-gray-700 bg-white dark:bg-[#1a1a2e] p-4 shadow-sm">
@@ -1059,24 +1316,28 @@ export default function AdminDashboard() {
                               {user._count.blogPosts}
                             </td>
                             <td className="px-6 py-4 text-right">
-                              {user.role !== 'SUPER_ADMIN' && user.id !== (session.user as any).id && (
-                                <div className="flex items-center justify-end gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                                  <button
-                                    onClick={() => handleUpdateUserRole(user.id, user.role === 'ADMIN' ? 'MEMBER' : 'ADMIN')}
-                                    className="h-8 px-2 inline-flex items-center justify-center rounded hover:bg-[#f5f5f8] dark:hover:bg-white/10 text-[#5e5f8d] dark:text-gray-400 hover:text-primary dark:hover:text-blue-400 transition-colors text-xs font-medium border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
-                                    title={user.role === 'ADMIN' ? 'Demote to Member' : 'Promote to Admin'}
-                                  >
-                                    {user.role === 'ADMIN' ? 'Demote' : 'Promote'}
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteUser(user.id)}
-                                    className="h-8 w-8 inline-flex items-center justify-center rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-[#5e5f8d] dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-                                    title="Delete User"
-                                  >
-                                    <span className="material-symbols-outlined text-[18px]">delete</span>
-                                  </button>
-                                </div>
-                              )}
+                              <div className="flex items-center justify-end gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                                <select
+                                  value={user.role}
+                                  onChange={(e) => handleUpdateUserRole(user.id, e.target.value)}
+                                  disabled={user.role === 'SUPER_ADMIN' || user.id === (session.user as any).id}
+                                  className="h-8 rounded-md border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-2 text-xs text-[#101018] dark:text-white disabled:opacity-50"
+                                  title={user.id === (session.user as any).id ? 'Cannot change your own role' : user.role === 'SUPER_ADMIN' ? 'Cannot change a Super Admin role' : 'Change role'}
+                                >
+                                  <option value="SUPER_ADMIN">SUPER_ADMIN</option>
+                                  <option value="ADMIN">ADMIN</option>
+                                  <option value="MEMBER">MEMBER</option>
+                                  <option value="GUEST">GUEST</option>
+                                </select>
+                                <button
+                                  onClick={() => handleDeleteUser(user.id)}
+                                  disabled={user.role === 'SUPER_ADMIN' || user.id === (session.user as any).id}
+                                  className="h-8 w-8 inline-flex items-center justify-center rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-[#5e5f8d] dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-[#5e5f8d]"
+                                  title={user.id === (session.user as any).id ? 'Cannot delete your own account' : user.role === 'SUPER_ADMIN' ? 'Cannot delete a Super Admin account' : 'Delete User'}
+                                >
+                                  <span className="material-symbols-outlined text-[18px]">delete</span>
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))
@@ -1227,6 +1488,199 @@ export default function AdminDashboard() {
           </div>
         )
       }
+
+      {showCreateUserModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+          <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-[#101018] dark:text-white">
+                Create User
+              </h3>
+              <button
+                onClick={() => setShowCreateUserModal(false)}
+                className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateUser} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Full name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={createUserFormData.fullName}
+                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, fullName: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={createUserFormData.email}
+                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, email: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Password *
+                </label>
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  value={createUserFormData.password}
+                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, password: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+                <p className="text-xs text-[#5e5f8d] dark:text-gray-400 mt-1">
+                  Minimum 6 characters.
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Role
+                </label>
+                <select
+                  value={createUserFormData.role}
+                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, role: e.target.value as any })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="SUPER_ADMIN">SUPER_ADMIN</option>
+                  <option value="ADMIN">ADMIN</option>
+                  <option value="MEMBER">MEMBER</option>
+                  <option value="GUEST">GUEST</option>
+                </select>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateUserModal(false)}
+                  className="inline-flex h-10 items-center justify-center rounded-lg border border-[#dadae7] dark:border-gray-700 bg-white dark:bg-transparent px-5 text-sm font-semibold text-[#101018] dark:text-white hover:bg-[#f5f5f8] dark:hover:bg-white/5 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors"
+                >
+                  Create
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showGalleryModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+          <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-[#101018] dark:text-white">
+                {editingGalleryImage ? 'Edit Image' : 'Add Image'}
+              </h3>
+              <button
+                onClick={() => setShowGalleryModal(false)}
+                className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleGallerySubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Image *
+                </label>
+                <ImageUpload
+                  value={galleryFormData.url}
+                  onChange={(url) => setGalleryFormData({ ...galleryFormData, url })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Caption
+                </label>
+                <input
+                  type="text"
+                  value={galleryFormData.caption}
+                  onChange={(e) => setGalleryFormData({ ...galleryFormData, caption: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Category
+                </label>
+                <input
+                  type="text"
+                  value={galleryFormData.category}
+                  onChange={(e) => setGalleryFormData({ ...galleryFormData, category: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Width
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={galleryFormData.width}
+                    onChange={(e) => setGalleryFormData({ ...galleryFormData, width: Number(e.target.value) })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Height
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={galleryFormData.height}
+                    onChange={(e) => setGalleryFormData({ ...galleryFormData, height: Number(e.target.value) })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowGalleryModal(false)}
+                  className="px-4 py-2 text-sm font-semibold text-[#5e5f8d] dark:text-gray-400 hover:bg-[#f0f0f5] dark:hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!galleryFormData.url}
+                  className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {editingGalleryImage ? 'Update Image' : 'Add Image'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Modal for Hero Announcements */}
       {
@@ -1458,6 +1912,7 @@ export default function AdminDashboard() {
                     if (deleteConfirmation.type === 'post') confirmDeletePost();
                     else if (deleteConfirmation.type === 'hero') confirmDeleteHero();
                     else if (deleteConfirmation.type === 'magazine') confirmDeleteMagazine();
+                    else if (deleteConfirmation.type === 'gallery') confirmDeleteGalleryImage();
                   }}
                   className="px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
                 >
