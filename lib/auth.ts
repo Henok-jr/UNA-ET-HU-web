@@ -96,11 +96,15 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }) {
       // 1. Initial Sign In: Populate token with user data
       if (user) {
         token.role = (user as any).role;
         token.id = user.id;
+        // Make sure email is always present so the refresh logic works reliably
+        if (user.email) {
+          token.email = user.email;
+        }
       }
 
       // 2. Refresh Strategy:
@@ -121,6 +125,21 @@ export const authOptions: NextAuthOptions = {
           }
         } catch (error) {
           console.error("Failed to refresh user role from DB:", error);
+        }
+      } else if (token.id) {
+        // Fallback for cases where NextAuth doesn't include email in the JWT
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { role: true, email: true }
+          });
+
+          if (dbUser) {
+            token.role = dbUser.role;
+            if (!token.email && dbUser.email) token.email = dbUser.email;
+          }
+        } catch (error) {
+          console.error("Failed to refresh user role from DB (id fallback):", error);
         }
       }
 

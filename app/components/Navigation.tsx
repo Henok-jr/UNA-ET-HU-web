@@ -83,13 +83,13 @@ export default function Navigation() {
         </button>
       )}
 
-      <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-[#212935]/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-[#212935]/80 backdrop-blur-md overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
 
               <Link href="/" className="flex items-center gap-3">
-                <div className="relative w-24 h-24 md:w-40 md:h-40 flex items-center justify-center">
+                <div className="relative w-12 h-12 md:w-14 md:h-14 flex items-center justify-center">
                   <Image
                     src="/UN_blue_logo.svg"
                     alt="UNA-ET-HU Logo"
