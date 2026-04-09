@@ -83,7 +83,7 @@ export default function Navigation() {
         </button>
       )}
 
-      <header className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-[#212935]/80 backdrop-blur-md overflow-x-hidden overflow-y-visible">
+      <header className="sticky top-0 z-[1000] w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-[#212935]/80 backdrop-blur-md overflow-x-hidden overflow-y-visible">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
@@ -351,221 +351,244 @@ export default function Navigation() {
             </div>
           </div>
         </div>
+      </header >
 
-        {/* Mobile Drawer & Backdrop */}
-        {/* Backdrop */}
-        <div
-          className={`fixed inset-0 z-[9990] bg-black/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-            }`}
-          onClick={() => setIsMenuOpen(false)}
-          aria-hidden="true"
-        />
+      {/* Mobile Drawer & Backdrop (kept outside header to avoid stacking/overflow issues) */}
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 z-[9990] bg-black/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+        onClick={() => setIsMenuOpen(false)}
+        aria-hidden="true"
+      />
 
-        {/* Drawer Panel */}
-        <div
-          className={`fixed top-0 z-[9999] h-[100dvh] w-[280px] bg-white dark:bg-[#1a1d23] shadow-2xl transition-[right] duration-300 ease-in-out lg:hidden ${isMenuOpen ? 'right-0' : '-right-[280px]'
-            }`}
-        >
-          <div className="flex flex-col h-full">
-            {/* Drawer Header */}
-            <div className="flex items-center justify-between p-4 pl-6 border-b border-gray-100 dark:border-gray-800">
-              <div className="flex items-center gap-2">
-                <div className="relative w-16 h-16">
-                  <Image src="/UN_blue_logo.svg" alt="Logo" fill className="object-contain" />
-                </div>
-                {/* <span className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight">Menu</span> */}
+      {/* Drawer Panel */}
+      <div
+        className={`fixed top-0 z-[9999] h-[100dvh] w-[280px] bg-white dark:bg-[#1a1d23] shadow-2xl transition-[right] duration-300 ease-in-out lg:hidden ${isMenuOpen ? 'right-0' : '-right-[280px]'
+          }`}
+      >
+        <div className="flex flex-col h-full">
+          {/* Drawer Header */}
+          <div className="flex items-center justify-between p-4 pl-6 border-b border-gray-100 dark:border-gray-800">
+            <div className="flex items-center gap-2">
+              <div className="relative w-16 h-16">
+                <Image src="/UN_blue_logo.svg" alt="Logo" fill className="object-contain" />
               </div>
+            </div>
+            <button
+              onClick={() => setIsMenuOpen(false)}
+              className="p-2 -mr-2 rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="Close menu"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+          </div>
+
+          {/* Drawer Content */}
+          <div className="flex-1 min-h-0 overflow-y-auto py-4 px-4 space-y-2 bg-white dark:bg-[#1a1d23]">
+            <Link
+              href="/"
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
+            >
+              <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">home</span>
+              Home
+            </Link>
+
+            {/* Mobile Teams Dropdown (Collapsible) */}
+            <div className="rounded-2xl overflow-hidden">
               <button
-                onClick={() => setIsMenuOpen(false)}
-                className="p-2 -mr-2 rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                aria-label="Close menu"
+                onClick={() => setIsMobileTeamsOpen(!isMobileTeamsOpen)}
+                className="flex items-center justify-between w-full px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
               >
-                <span className="material-symbols-outlined">close</span>
+                <div className="flex items-center gap-4">
+                  <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">groups</span>
+                  Teams
+                </div>
+                <span className={`material-symbols-outlined text-lg transition-transform duration-200 ${isMobileTeamsOpen ? 'rotate-180' : ''}`}>
+                  expand_more
+                </span>
               </button>
-            </div>
-
-            {/* Drawer Content */}
-            <div className="flex-1 min-h-0 overflow-y-auto py-4 px-4 space-y-2 bg-white dark:bg-[#1a1d23]">
-              <Link
-                href="/"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
+              <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${isMobileTeamsOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                  }`}
               >
-                <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">home</span>
-                Home
-              </Link>
-
-              {/* Mobile Teams Dropdown (Collapsible) */}
-              <div className="rounded-2xl overflow-hidden">
-                <button
-                  onClick={() => setIsMobileTeamsOpen(!isMobileTeamsOpen)}
-                  className="flex items-center justify-between w-full px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
-                >
-                  <div className="flex items-center gap-4">
-                    <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">groups</span>
-                    Teams
-                  </div>
-                  <span className={`material-symbols-outlined text-lg transition-transform duration-200 ${isMobileTeamsOpen ? 'rotate-180' : ''}`}>
-                    expand_more
-                  </span>
-                </button>
-                <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${isMobileTeamsOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                    }`}
-                >
-                  <div className="pl-4 space-y-1 ml-4 border-l-2 border-slate-100 dark:border-slate-800 my-1">
-                    {teamLinks.map((link) => (
-                      <Link
-                        key={link.name}
-                        href={link.href}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 rounded-lg hover:text-primary dark:hover:text-white transition-colors"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-primary"></span>
-                        <span>{link.name}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Mobile Newsletter Dropdown (Collapsible) */}
-              <div className="rounded-2xl overflow-hidden">
-                <button
-                  onClick={() => setIsMobileNewsletterOpen(!isMobileNewsletterOpen)}
-                  className="flex items-center justify-between w-full px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
-                >
-                  <div className="flex items-center gap-4">
-                    <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">article</span>
-                    NewsLetter
-                  </div>
-                  <span className={`material-symbols-outlined text-lg transition-transform duration-200 ${isMobileNewsletterOpen ? 'rotate-180' : ''}`}>
-                    expand_more
-                  </span>
-                </button>
-                <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${isMobileNewsletterOpen ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
-                    }`}
-                >
-                  <div className="pl-4 space-y-1 ml-4 border-l-2 border-slate-100 dark:border-slate-800 my-1">
+                <div className="pl-4 space-y-1 ml-4 border-l-2 border-slate-100 dark:border-slate-800 my-1">
+                  {teamLinks.map((link) => (
                     <Link
-                      href="/magazine"
+                      key={link.name}
+                      href={link.href}
                       onClick={() => setIsMenuOpen(false)}
                       className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 rounded-lg hover:text-primary dark:hover:text-white transition-colors"
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-primary"></span>
-                      <span>Magazine</span>
+                      <span>{link.name}</span>
                     </Link>
-                    <Link
-                      href="/blog"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 rounded-lg hover:text-primary dark:hover:text-white transition-colors"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-primary"></span>
-                      <span>Blog</span>
-                    </Link>
-                  </div>
+                  ))}
                 </div>
               </div>
-
-              <Link
-                href="/gallery"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
-              >
-                <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">perm_media</span>
-                Gallery
-              </Link>
-
-              <Link
-                href="/about"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
-              >
-                <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">info</span>
-                About Us
-              </Link>
-
-              <div className="my-2 border-t border-slate-100 dark:border-slate-800 mx-4"></div>
-
-              {/* Admin Links */}
-              {(session as any)?.user?.role === 'SUPER_ADMIN' && (
-                <Link
-                  href="/admin"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-purple-600 dark:text-purple-400 rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
-                >
-                  <span className="material-symbols-outlined text-[24px]">admin_panel_settings</span>
-                  Super Admin
-                </Link>
-              )}
-              {(session as any)?.user?.role === 'ADMIN' && (
-                <Link
-                  href="/admin"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-primary rounded-full hover:bg-primary/10 transition-colors"
-                >
-                  <span className="material-symbols-outlined text-[24px]">dashboard</span>
-                  Admin Dashboard
-                </Link>
-              )}
             </div>
 
-            {/* Drawer Footer (Auth) */}
-            <div className="p-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#1a1d23]">
-              {session ? (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 p-2 rounded-lg bg-white dark:bg-black/20 border border-gray-100 dark:border-gray-800">
-                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm shrink-0">
-                      {(session.user as any)?.image ? (
-                        <img
-                          src={(session.user as any).image}
-                          alt={session.user?.name || 'User'}
-                          className="w-full h-full rounded-full object-cover"
-                        />
-                      ) : (
-                        getInitials(session.user?.name || 'User')
-                      )}
-                    </div>
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                        {session.user?.name}
-                      </span>
-                      <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
-                        {session.user?.email}
-                      </span>
-                    </div>
+            {/* Mobile Newsletter Dropdown (Collapsible) */}
+            <div className="rounded-2xl overflow-hidden">
+              <button
+                onClick={() => setIsMobileNewsletterOpen(!isMobileNewsletterOpen)}
+                className="flex items-center justify-between w-full px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
+              >
+                <div className="flex items-center gap-4">
+                  <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">article</span>
+                  NewsLetter
+                </div>
+                <span className={`material-symbols-outlined text-lg transition-transform duration-200 ${isMobileNewsletterOpen ? 'rotate-180' : ''}`}>
+                  expand_more
+                </span>
+              </button>
+              <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${isMobileNewsletterOpen ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+              >
+                <div className="pl-4 space-y-1 ml-4 border-l-2 border-slate-100 dark:border-slate-800 my-1">
+                  <Link
+                    href="/magazine"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 rounded-lg hover:text-primary dark:hover:text-white transition-colors"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-primary"></span>
+                    <span>Magazine</span>
+                  </Link>
+                  <Link
+                    href="/blog"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 rounded-lg hover:text-primary dark:hover:text-white transition-colors"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-primary"></span>
+                    <span>Blog</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            <Link
+              href="/gallery"
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
+            >
+              <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">perm_media</span>
+              Gallery
+            </Link>
+
+            <Link
+              href="/about"
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
+            >
+              <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">info</span>
+              About Us
+            </Link>
+
+            {session ? (
+              <>
+                <div className="my-2 border-t border-slate-100 dark:border-slate-800 mx-4"></div>
+
+                <Link
+                  href="/profile"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
+                >
+                  <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">person</span>
+                  My Profile
+                </Link>
+
+                <Link
+                  href="/settings"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-slate-800 dark:text-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-all group"
+                >
+                  <span className="material-symbols-outlined text-[24px] text-slate-500 group-hover:text-primary transition-colors">settings</span>
+                  Settings
+                </Link>
+              </>
+            ) : null}
+
+            <div className="my-2 border-t border-slate-100 dark:border-slate-800 mx-4"></div>
+
+            {/* Admin Links */}
+            {(session as any)?.user?.role === 'SUPER_ADMIN' && (
+              <Link
+                href="/admin"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-purple-600 dark:text-purple-400 rounded-full hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
+              >
+                <span className="material-symbols-outlined text-[24px]">admin_panel_settings</span>
+                Super Admin
+              </Link>
+            )}
+            {(session as any)?.user?.role === 'ADMIN' && (
+              <Link
+                href="/admin"
+                onClick={() => setIsMenuOpen(false)}
+                className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-primary rounded-full hover:bg-primary/10 transition-colors"
+              >
+                <span className="material-symbols-outlined text-[24px]">dashboard</span>
+                Admin Dashboard
+              </Link>
+            )}
+          </div>
+
+          {/* Drawer Footer (Auth) */}
+          <div className="p-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#1a1d23]">
+            {session ? (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 p-2 rounded-lg bg-white dark:bg-black/20 border border-gray-100 dark:border-gray-800">
+                  <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm shrink-0">
+                    {(session.user as any)?.image ? (
+                      <img
+                        src={(session.user as any).image}
+                        alt={session.user?.name || 'User'}
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    ) : (
+                      getInitials(session.user?.name || 'User')
+                    )}
                   </div>
-                  <button
-                    onClick={handleSignOut}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-red-600 dark:text-red-400 bg-white dark:bg-black/20 border border-red-100 dark:border-red-900/30 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-all shadow-sm"
-                  >
-                    <span className="material-symbols-outlined text-lg">logout</span>
-                    Sign Out
-                  </button>
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                      {session.user?.name}
+                    </span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                      {session.user?.email}
+                    </span>
+                  </div>
                 </div>
-              ) : (
-                <div className="grid grid-cols-2 gap-3">
-                  <Link
-                    href="/auth/signin"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center justify-center px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-black/20 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    href="/auth/signup"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center justify-center px-4 py-2.5 text-sm font-bold text-white bg-primary rounded-lg hover:bg-primary/90 transition-all shadow-md shadow-primary/20"
-                  >
-                    Join Us
-                  </Link>
-                </div>
-              )}
-            </div>
+                <button
+                  onClick={handleSignOut}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-red-600 dark:text-red-400 bg-white dark:bg-black/20 border border-red-100 dark:border-red-900/30 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-all shadow-sm"
+                >
+                  <span className="material-symbols-outlined text-lg">logout</span>
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3">
+                <Link
+                  href="/auth/signin"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center justify-center px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-black/20 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center justify-center px-4 py-2.5 text-sm font-bold text-white bg-primary rounded-lg hover:bg-primary/90 transition-all shadow-md shadow-primary/20"
+                >
+                  Join Us
+                </Link>
+              </div>
+            )}
           </div>
         </div>
-      </header >
+      </div>
     </>
   );
 }
