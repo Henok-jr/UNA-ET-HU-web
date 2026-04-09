@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Upload, X, Loader2 } from 'lucide-react';
 import Image from 'next/image';
@@ -25,6 +24,11 @@ export const ImageUpload = ({
     const [isUploading, setIsUploading] = useState(false);
     const [uploadMode, setUploadMode] = useState<'FILE' | 'URL'>('FILE');
     const [urlInput, setUrlInput] = useState('');
+    const [imageError, setImageError] = useState(false);
+
+    useEffect(() => {
+        setImageError(false);
+    }, [value]);
 
     const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || e.target.files.length === 0) {
@@ -32,34 +36,34 @@ export const ImageUpload = ({
         }
 
         const file = e.target.files[0];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
 
         try {
             setIsUploading(true);
 
-            // Upload file to Supabase
-            const { data, error: uploadError } = await supabase.storage
-                .from(bucketName)
-                .upload(filePath, file);
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('bucketName', bucketName);
+            formData.append('folder', 'images');
 
-            if (uploadError) {
-                throw uploadError;
+            const response = await fetch('/api/uploads', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Failed to upload image');
             }
 
-            // Get public URL
-            const { data: { publicUrl } } = supabase.storage
-                .from(bucketName)
-                .getPublicUrl(filePath);
-
-            onChange(publicUrl);
+            onChange(result.url);
             toast.success('Image uploaded successfully');
         } catch (error: any) {
             console.error('Error uploading image:', error);
-            toast.error('Failed to upload image', error.message);
+            toast.error(error?.message || 'Failed to upload image');
         } finally {
             setIsUploading(false);
+            e.target.value = '';
         }
     };
 
@@ -86,18 +90,6 @@ export const ImageUpload = ({
             handleUrlSubmit();
         }
     };
-
-    const [imageError, setImageError] = useState(false);
-
-    // Reset error when value changes
-    if (value && imageError && value !== urlInput) { // simplistic check
-        // actually better to use useEffect
-    }
-
-    // We need useEffect to reset error state when value changes
-    useState(() => {
-        setImageError(false);
-    }); // This is not correct for effect. Use useEffect.
 
     return (
         <div className="mb-4 flex flex-col gap-4">

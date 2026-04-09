@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Upload, X, Loader2, FileText } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -34,34 +33,33 @@ export const PdfUpload = ({
             return;
         }
 
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
-
         try {
             setIsUploading(true);
 
-            // Upload file to Supabase
-            const { data, error: uploadError } = await supabase.storage
-                .from(bucketName)
-                .upload(filePath, file);
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('bucketName', bucketName);
+            formData.append('folder', 'documents');
 
-            if (uploadError) {
-                throw uploadError;
+            const response = await fetch('/api/uploads', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Failed to upload PDF');
             }
 
-            // Get public URL
-            const { data: { publicUrl } } = supabase.storage
-                .from(bucketName)
-                .getPublicUrl(filePath);
-
-            onChange(publicUrl);
+            onChange(result.url);
             toast.success('PDF uploaded successfully');
         } catch (error: any) {
             console.error('Error uploading pdf:', error);
-            toast.error('Failed to upload PDF', error.message);
+            toast.error(error?.message || 'Failed to upload PDF');
         } finally {
             setIsUploading(false);
+            e.target.value = '';
         }
     };
 
