@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import Navigation from '../components/Navigation';
 import { ImageUpload } from '../components/ImageUpload';
 import { PdfUpload } from '../components/PdfUpload';
+import DeveloperManagement from './components/DeveloperManagement';
 
 interface Post {
   id: string;
@@ -124,7 +125,7 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [activeTab, setActiveTab] = useState<'blog' | 'users' | 'hero' | 'magazines' | 'gallery' | 'reports' | 'events'>('blog');
+  const [activeTab, setActiveTab] = useState<'blog' | 'users' | 'hero' | 'magazines' | 'gallery' | 'reports' | 'events' | 'developers'>('blog');
 
   const [formData, setFormData] = useState({
     title: '',
@@ -207,6 +208,8 @@ export default function AdminDashboard() {
         fetchReports();
       } else if (activeTab === 'events') {
         fetchEvents();
+      } else if (activeTab === 'developers') {
+        setLoading(false);
       }
     }
   }, [session, search, categoryFilter, statusFilter, activeTab]);
@@ -1075,6 +1078,16 @@ export default function AdminDashboard() {
                 Manage Users
               </button>
             )}
+            <button
+              onClick={() => setActiveTab('developers')}
+              className={`flex items-center gap-2 px-4 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'developers'
+                ? 'border-primary text-primary dark:text-blue-400'
+                : 'border-transparent text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white hover:border-gray-300'
+                }`}
+            >
+              <span className="material-symbols-outlined text-[20px]">code</span>
+              Developers
+            </button>
           </nav>
         </div>
       </div>
@@ -1802,6 +1815,8 @@ export default function AdminDashboard() {
               </div>
             </>
           )}
+
+          {activeTab === 'developers' && <DeveloperManagement />}
 
         </div>
       </main >

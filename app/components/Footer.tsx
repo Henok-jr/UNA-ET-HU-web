@@ -180,7 +180,7 @@ export default function Footer() {
           <p>
             © 2024 United Nations Association Ethiopia - HU Chapter. All rights reserved.
           </p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap items-center justify-end gap-4">
             <a href="#" className="hover:text-white transition-colors">
               Privacy Policy
             </a>
@@ -190,6 +190,13 @@ export default function Footer() {
             <a href="#" className="hover:text-white transition-colors">
               Contact Us
             </a>
+            <Link
+              href="/developers"
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-bold text-white shadow-sm shadow-primary/20 hover:bg-primary/90 transition-colors"
+            >
+              Developers
+              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </Link>
           </div>
         </div>
       </div>

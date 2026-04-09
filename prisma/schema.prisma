@@ -219,3 +219,20 @@ model Magazine {
 
   @@map("magazines")
 }
+
+model Developer {
+  id                String   @id @default(cuid())
+  fullName          String   @map("full_name")
+  title             String
+  mobile            String
+  email             String
+  image             String?
+  linkedinUsername  String?  @map("linkedin_username")
+  instagramUsername String?  @map("instagram_username")
+  telegramUsername  String?  @map("telegram_username")
+  order             Int      @default(0)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@map("developers")
+}
