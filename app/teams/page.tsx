@@ -5,16 +5,16 @@ import Link from 'next/link';
 // Data for Presidency (2 members)
 const presidency = [
   {
-    name: "Abebe Kebede",
+    name: "Aminu Moges",
     role: "President",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+    image: "/images/pr.png",
     linkedin: "#",
     twitter: "#",
   },
   {
-    name: "Helen Tadesse",
+    name: "Kalkidan Kebede",
     role: "Vice President",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
+    image: "/images/vp.jpg",
     linkedin: "#",
     twitter: "#",
   },
@@ -23,63 +23,68 @@ const presidency = [
 // Data for Team Heads (5 members) - Uses Black&White to Color hover effect
 const teamHeads = [
   {
-    name: "Martha Yoseph",
-    role: "MUN Coordinator",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuD1GYx-P3f0E6U58pbItggBdyuiBDX8OqM-E4927xJ2atODrHQFGjaMcN00Ao5YIf94wUjEpyL8-M1a6KnM1g5dcA8Jw1WdgUlTN9UBxRvjlt4LVyrtH0gmkDHppKgm5faXu3M_HDgx41EkPa6Hbq-pJ7hGi_lpYhjXVRcHZ51DencqV0ikLVXQNdhm9cuYTcIztk8_3YOUbIP3yL_Wvzfd25SyGsauJIcO-GHgKGlDsOu5fJq9414xw4HfsMJx3tjOdZu_5WlQ8ujT",
+    name: "Rose Kassa",
+    role: "MUN Team Head",
+    image: "/images/mnu.png",
   },
   {
-    name: "Dawit Belay",
-    role: "Head of Delegates",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBi5nf8oViN_Y7kxSH5YfEA3E-W_YUV33_AfW6g2lsuH_nEt2eK7To33gA4xnCBRWudkJ4_d3sZgfScBzNUjN87mb8Ifnymf4d275NfAYxhPzyeJEhy_Ce-bQjfmIwq-J8eb0ALlMw6oxqFUqQ1fvbyNMKX75-apAedog0xWmOYdk0NUNuNLmPeVngPTQsn8bfwL-bwJqyjqW0Vd4uNVjm6qeIrKy5HJPcqwRtRRZyX5mYz1X74ZEdh5z4uDQhOhirfNfyMq9gROAXB",
+    name: "Yonatan Berihun",
+    role: "Innovation Team Head",
+    image: "/images/Inov.jpg",
   },
   {
-    name: "Lulit Mesfin",
-    role: "Research Lead",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDmvlebazCi9SebIq1cgUgfhGSebv3IPXKNQoGuF1eiEVVAZKehDcZLI2T4fcR50m1xfBqjE5ZtuNt6fbFbfnSyHz9t-ZPkmhDUkO5rkWamS0w7dgblsfF_x3K5KH3oIilJ8XEZeJULj5w_QX7GbtQi9LNTQP-pUL0sG9LfGpejYj9NmcCeGhI4VJwT4VjS7najz-9s0YgZH-KmvOe5cW2NixPVgUuyIJmjNuTDPV942xZy4R0EDi7wjFJ8j7ZIxqiCClBWb6DceN-t",
+    name: "Kibrab Abera",
+    role: "Project Team Head",
+    image: "/images/proj.png",
   },
   {
-    name: "Yonas Kebede",
-    role: "Public Speaking Coach",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBq5xpjSyeUaPoCVLcRYGacSX1urxylS_yAlDzmbvROCYS-2c4Gf0eKDbZ22t8LCG-3WbBFaEe-N3NXGYUJMLI6QKA1qlq6A8plPdP36KimOuBYnKQvMCrOJqMedN0vnHC76hXcTMwy2lcXj4mrdcO_PLd01S-dqkDLnZkkLXb9IMWDzW6mRKuGhI-CnipdYpJ4BRzKkF3IlYtDeMK5zrrQA1B_8keTh-FdUgTUpdEo9DmMVSDrzwK5BRyTQk8-6yZVmwNZNVcT1vOa",
+    name: "Abinet Girma",
+    role: "SDG Ambassadors Head",
+    image: "/images/sdg.png",
   },
   {
-    name: "Bethelhem Assefa", // Placeholder
-    role: "Events & Logistics Head",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop",
+    name: "Timihirt Shibiru", // Placeholder
+    role: "Debate Team Head",
+    image: "/images/deb.jpg",
   },
 ];
 
 // Data for Executives (6 members)
 const executives = [
   {
-    name: "Samuel Girma",
-    role: "Secretary General",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
+    name: "Rebecca Tesfa",
+    role: "Secretary",
+    image: "/images/sec.png",
   },
   {
-    name: "Hanna Mekonnen", // Placeholder
-    role: "Director of Finance",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
+    name: "Lami Negash", // Placeholder
+    role: "Internal Affairs ",
+    image: "/images/inter.jpg",
   },
   {
-    name: "Kirubel Tefera", // Placeholder
-    role: "Director of Marketing",
-    image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop",
+    name: "Gelila Getinet", // Placeholder
+    role: "Communication Head",
+    image: "/images/gel.jpg",
   },
   {
-    name: "Rahwa Tadesse", // Placeholder
-    role: "Director of HR",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop",
+    name: "Sebona Abdella", // Placeholder
+    role: "Finance Tream Head",
+    image: "/images/fina.png",
   },
   {
-    name: "Eyob Alemu", // Placeholder
-    role: "Director of Partnerships",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
+    name: "Eden Lulu", // Placeholder
+    role: "Membership Coordinator",
+    image: "/images/memb.jpg",
   },
   {
-    name: "Saron Bekele", // Placeholder
-    role: "Director of Communications",
-    image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop",
+    name: "Betelhem Ayehualem", // Placeholder
+    role: "Event Team Head",
+    image: "/images/event.jpg",
+  },
+  {
+    name: "Feneti Nuru", // Placeholder
+    role: "Social Media Manager",
+    image: "/images/media.png",
   },
 ];
 
