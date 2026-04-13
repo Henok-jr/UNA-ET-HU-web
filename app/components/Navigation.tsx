@@ -146,21 +146,21 @@ export default function Navigation() {
                         <span>SDG Ambassadors</span>
                       </Link>
                       <Link
-                        href="/teams?active=innovation"
+                        href="/innovation"
                         className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg transition-colors"
                         onClick={() => setIsTeamsOpen(false)}
                       >
                         <span>Innovation Team</span>
                       </Link>
                       <Link
-                        href="/teams?active=debate"
+                        href="/debate"
                         className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg transition-colors"
                         onClick={() => setIsTeamsOpen(false)}
                       >
                         <span>Debate Team</span>
                       </Link>
                       <Link
-                        href="/teams?active=project"
+                        href="/projects"
                         className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg transition-colors"
                         onClick={() => setIsTeamsOpen(false)}
                       >
