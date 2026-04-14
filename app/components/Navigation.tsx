@@ -77,14 +77,14 @@ export default function Navigation() {
       {canGoBack && (
         <button
           onClick={() => router.back()}
-          className="fixed top-[60px] left-4 z-[5001] bg-white/90 dark:bg-[#1a1d23]/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-gray-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full p-2 shadow-lg transition-all hover:scale-105 active:scale-95 group"
+          className="fixed top-[60px] left-4 z-[5001] bg-white/90 backdrop-blur-md border border-slate-200 text-slate-700 hover:bg-slate-100 rounded-full p-2 shadow-lg transition-all hover:scale-105 active:scale-95 group"
           aria-label="Go back"
         >
           <span className="material-symbols-outlined text-xl group-hover:-translate-x-1 transition-transform">arrow_back</span>
         </button>
       )}
 
-      <header className="sticky top-0 z-[5000] isolate w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-[#212935]/80 backdrop-blur-md overflow-visible">
+      <header className="sticky top-0 z-[5000] isolate w-full border-b border-slate-200 bg-white/85 backdrop-blur-md overflow-visible">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
@@ -98,16 +98,14 @@ export default function Navigation() {
                     className="object-contain"
                   />
                 </div>
-                <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white uppercase">
+                <h1 className="text-xl font-bold tracking-tight text-slate-900 uppercase">
                   UNA-ET-HU
                 </h1>
               </Link>
 
-
-
               {/* Desktop Navigation */}
               <div className="hidden lg:flex items-center gap-1">
-                <Link href="/" className="px-4 py-2 rounded-full text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                <Link href="/" className="px-4 py-2 rounded-full text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors">
                   Home
                 </Link>
 
@@ -115,7 +113,7 @@ export default function Navigation() {
                 <div ref={teamsDropdownRef} className="relative">
                   <button
                     onClick={() => setIsTeamsOpen(!isTeamsOpen)}
-                    className="flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                    className="flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors"
                   >
                     Teams
                     <span className={`material-symbols-outlined text-[18px] transition-transform duration-200 ${isTeamsOpen ? 'rotate-180' : ''}`}>
@@ -125,7 +123,7 @@ export default function Navigation() {
 
                   {/* Dropdown Menu */}
                   <div
-                    className={`absolute top-full left-0 z-[5050] mt-2 w-60 bg-white dark:bg-[#1a1d23] rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-200 origin-top ${isTeamsOpen
+                    className={`absolute top-full left-0 z-[5050] mt-2 w-60 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden transition-all duration-200 origin-top ${isTeamsOpen
                       ? 'opacity-100 translate-y-0 scale-100'
                       : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'
                       }`}
@@ -133,35 +131,35 @@ export default function Navigation() {
                     <div className="p-2 flex flex-col gap-1">
                       <Link
                         href="/mun"
-                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg transition-colors"
+                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors"
                         onClick={() => setIsTeamsOpen(false)}
                       >
                         <span>Model UN Team</span>
                       </Link>
                       <Link
                         href="/sdg"
-                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg transition-colors"
+                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors"
                         onClick={() => setIsTeamsOpen(false)}
                       >
                         <span>SDG Ambassadors</span>
                       </Link>
                       <Link
                         href="/innovation"
-                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg transition-colors"
+                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors"
                         onClick={() => setIsTeamsOpen(false)}
                       >
                         <span>Innovation Team</span>
                       </Link>
                       <Link
                         href="/debate"
-                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg transition-colors"
+                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors"
                         onClick={() => setIsTeamsOpen(false)}
                       >
                         <span>Debate Team</span>
                       </Link>
                       <Link
                         href="/projects"
-                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg transition-colors"
+                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors"
                         onClick={() => setIsTeamsOpen(false)}
                       >
                         <span>Project Team</span>
@@ -170,7 +168,7 @@ export default function Navigation() {
                   </div>
                 </div>
 
-                <Link href="/gallery" className="px-4 py-2 rounded-full text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                <Link href="/gallery" className="px-4 py-2 rounded-full text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors">
                   Gallery
                 </Link>
 
@@ -179,7 +177,7 @@ export default function Navigation() {
                 <div ref={newsletterDropdownRef} className="relative">
                   <button
                     onClick={() => setIsNewsletterOpen(!isNewsletterOpen)}
-                    className="flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 transition-colors"
+                    className="flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors"
                   >
                     NewsLetter
                     <span className={`material-symbols-outlined text-[18px] transition-transform duration-200 ${isNewsletterOpen ? 'rotate-180' : ''}`}>
@@ -189,7 +187,7 @@ export default function Navigation() {
 
                   {/* Dropdown Menu */}
                   <div
-                    className={`absolute top-full left-0 z-[5050] mt-2 w-48 bg-white dark:bg-[#1a1d23] rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-200 origin-top ${isNewsletterOpen
+                    className={`absolute top-full left-0 z-[5050] mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden transition-all duration-200 origin-top ${isNewsletterOpen
                       ? 'opacity-100 translate-y-0 scale-100'
                       : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'
                       }`}
@@ -197,14 +195,14 @@ export default function Navigation() {
                     <div className="p-2 flex flex-col gap-1">
                       <Link
                         href="/magazine"
-                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg transition-colors"
+                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors"
                         onClick={() => setIsNewsletterOpen(false)}
                       >
                         <span>Magazine</span>
                       </Link>
                       <Link
                         href="/blog"
-                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg transition-colors"
+                        className="flex items-center gap-3 w-full px-3 py-2 text-left text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-lg transition-colors"
                         onClick={() => setIsNewsletterOpen(false)}
                       >
                         <span>Blog</span>
@@ -212,7 +210,7 @@ export default function Navigation() {
                     </div>
                   </div>
                 </div>
-                <Link href="/about" className="px-4 py-2 rounded-full text-sm font-medium text-[#5e5f8d] dark:text-gray-300 hover:text-primary dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                <Link href="/about" className="px-4 py-2 rounded-full text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 transition-colors">
                   About Us
                 </Link>
                 {(session as any)?.user?.role === 'SUPER_ADMIN' && (
@@ -240,7 +238,7 @@ export default function Navigation() {
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="flex items-center gap-3 hover:opacity-80 transition-opacity"
                   >
-                    <span className="hidden sm:block text-sm font-semibold text-slate-900 dark:text-white">
+                    <span className="hidden sm:block text-sm font-semibold text-slate-900">
                       {session.user?.name}
                     </span>
                     <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm shadow-md cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all">
@@ -258,12 +256,12 @@ export default function Navigation() {
 
                   {/* Dropdown Menu */}
                   {isDropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 z-[5100] w-64 bg-white dark:bg-[#1a1d23] border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg py-2 animate-in fade-in slide-in-from-top-2 duration-200">
-                      <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700">
-                        <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                    <div className="absolute right-0 top-full mt-2 z-[5100] w-64 bg-white border border-slate-200 rounded-xl shadow-lg py-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="px-4 py-3 border-b border-slate-200">
+                        <p className="text-sm font-semibold text-slate-900">
                           {session.user?.name}
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                        <p className="text-xs text-slate-500 mt-1">
                           {session.user?.email}
                         </p>
                       </div>
@@ -311,7 +309,7 @@ export default function Navigation() {
                         )}
                       </div>
 
-                      <div className="border-t border-slate-200 dark:border-slate-700 pt-1">
+                      <div className="border-t border-slate-200 pt-1">
                         <button
                           onClick={handleSignOut}
                           className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"

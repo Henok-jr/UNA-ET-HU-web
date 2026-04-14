@@ -1,6 +1,10 @@
 "use client";
 
 import { useState } from "react";
+
+// NOTE: Converted to Server Component so we can load events from DB.
+
+import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { PlayCircle, ArrowRight } from "lucide-react";
 import Image from "next/image";
@@ -473,20 +477,76 @@ function ImpactInitiatives() {
     );
 }
 
-// --- Main Page Component ---
+export default async function SDGPage() {
+  const events = await prisma.conference.findMany({
+    where: { status: "UPCOMING" },
+    orderBy: { date: "asc" },
+    take: 50,
+  });
 
-export default function SDGPage() {
-    return (
-        <>
-            <Navigation />
-            <main>
-                <SDGHero />
-                <SDGGrid />
-                <ImpactInitiatives />
-                <LeadAmbassadors />
-                <SDGCta />
-            </main>
-            <Footer />
-        </>
-    );
+  const upcomingEvents = events.filter((ev) => (ev as any).team === "SDG") as unknown as Array<{
+    id: string;
+    title: string;
+    description: string;
+    date: Date;
+    location: string | null;
+    image: string | null;
+  }>;
+
+  return (
+    <>
+      <Navigation />
+      <main>
+        <SDGHero />
+        <SDGGrid />
+        <ImpactInitiatives />
+        <LeadAmbassadors />
+
+        <section id="events" className="bg-card py-20 border-t border-gray-100 dark:border-gray-800">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div>
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Upcoming SDG Events</h2>
+                <p className="mt-3 text-muted-foreground">
+                  Events created for the SDG team.
+                </p>
+              </div>
+            </div>
+
+            {upcomingEvents.length === 0 ? (
+              <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-8 text-center text-slate-600 dark:text-slate-400">
+                No upcoming SDG events yet.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {upcomingEvents.map((event) => (
+                  <article
+                    key={event.id}
+                    className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-hidden shadow-sm"
+                  >
+                    {event.image && (
+                      <div className="relative h-44 w-full">
+                        <img src={event.image} alt={event.title} className="h-full w-full object-cover" />
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white">{event.title}</h3>
+                      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 line-clamp-3">{event.description}</p>
+                      <p className="mt-3 text-xs text-slate-500 dark:text-slate-500">
+                        {new Date(event.date).toLocaleString()}
+                        {event.location ? ` • ${event.location}` : ''}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        <SDGCta />
+      </main>
+      <Footer />
+    </>
+  );
 }
