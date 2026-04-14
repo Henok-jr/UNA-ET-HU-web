@@ -2,10 +2,6 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import type { Prisma } from '@prisma/client';
-
-const TEAM_VALUES = ['GENERAL', 'MUN', 'SDG', 'INNOVATION', 'PROJECT', 'DEBATE'] as const;
-type TeamValue = (typeof TEAM_VALUES)[number];
 
 // GET: Fetch events
 // - Admin/SuperAdmin: all events
@@ -49,21 +45,14 @@ export async function POST(request: Request) {
     const image = typeof body.image === 'string' ? body.image : null;
     const status = typeof body.status === 'string' ? body.status : 'UPCOMING';
     const dateRaw = typeof body.date === 'string' ? body.date : '';
-    const teamRaw = typeof body.team === 'string' ? body.team.trim() : '';
 
     if (!title) return NextResponse.json({ error: 'Title is required' }, { status: 400 });
     if (!description) return NextResponse.json({ error: 'Description is required' }, { status: 400 });
     if (!dateRaw) return NextResponse.json({ error: 'Date is required' }, { status: 400 });
-    if (!teamRaw) return NextResponse.json({ error: 'Team is required' }, { status: 400 });
 
     const date = new Date(dateRaw);
     if (Number.isNaN(date.valueOf())) {
       return NextResponse.json({ error: 'Invalid date' }, { status: 400 });
-    }
-
-    const team = (TEAM_VALUES as readonly string[]).includes(teamRaw) ? (teamRaw as TeamValue) : null;
-    if (!team) {
-      return NextResponse.json({ error: `Invalid team. Allowed: ${TEAM_VALUES.join(', ')}` }, { status: 400 });
     }
 
     const event = await prisma.conference.create({
@@ -74,8 +63,7 @@ export async function POST(request: Request) {
         location,
         image,
         status,
-        team,
-      } as any,
+      },
     });
 
     return NextResponse.json(event, { status: 201 });

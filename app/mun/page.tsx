@@ -1,41 +1,18 @@
+"use client";
+
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import Link from 'next/link';
 import { Award, BookOpen, PlayCircle, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { headers } from 'next/headers';
-
-type MunEvent = {
-  id: string;
-  title: string;
-  description: string;
-  date: string | Date;
-  location: string | null;
-  image: string | null;
-  status?: string;
-  team?: string;
-};
-
-async function getMunEvents(): Promise<MunEvent[]> {
-  const h = await headers();
-  const host = h.get('x-forwarded-host') ?? h.get('host');
-  const proto = h.get('x-forwarded-proto') ?? 'http';
-  const baseUrl = host ? `${proto}://${host}` : '';
-
-  const res = await fetch(`${baseUrl}/api/events`, { cache: 'no-store' });
-  if (!res.ok) return [];
-
-  const data = (await res.json()) as MunEvent[];
-  return data.filter((ev) => ev?.status === 'UPCOMING' && ev?.team === 'MUN');
-}
 
 // --- Components ---
 
 function MUNHero() {
   return (
-    <header className="relative flex min-h-[600px] w-full items-center justify-center overflow-hidden bg-slate-50">
+    <header className="relative flex min-h-[600px] w-full items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-white/80 to-white/60 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30 z-10" />
         <div
           className="h-full w-full bg-cover bg-center bg-no-repeat"
           style={{
@@ -44,33 +21,33 @@ function MUNHero() {
         />
       </div>
       <div className="relative z-20 mx-auto flex max-w-7xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-1.5 backdrop-blur-md">
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 backdrop-blur-md">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-30" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
           </span>
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+          <span className="text-xs font-bold uppercase tracking-wider text-white">
             Excellence in Diplomacy
           </span>
         </div>
-        <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl md:text-6xl lg:max-w-4xl">
+        <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:max-w-4xl">
           Model United <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-slate-900">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-white">
             Nations
           </span>
         </h1>
-        <p className="mt-6 max-w-2xl text-lg font-medium leading-relaxed text-slate-600 sm:text-xl">
+        <p className="mt-6 max-w-2xl text-lg font-medium leading-relaxed text-gray-200 sm:text-xl">
           Empowering the next generation of global leaders through rigorous debate,
           collaborative problem-solving, and international cooperation.
         </p>
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-          <Button asChild size="lg" className="font-bold shadow-xl shadow-primary/20">
-            <Link href="/updates#events">Register for Next MUN</Link>
+          <Button size="lg" className="font-bold shadow-xl shadow-primary/20">
+            Register for Next MUN
           </Button>
           <Button
             size="lg"
             variant="outline"
-            className="bg-white/70 border-slate-200 text-slate-800 hover:bg-white font-bold backdrop-blur-sm"
+            className="bg-white/10 border-white/20 text-white hover:bg-white/20 font-bold backdrop-blur-sm"
           >
             <PlayCircle className="mr-2 h-5 w-5" />
             View Schedule
@@ -89,9 +66,9 @@ const stats = [
 
 function PastSuccess() {
   return (
-    <section className="bg-white py-20 border-t border-slate-200">
+    <section className="bg-card py-20 border-t border-gray-100 dark:border-gray-800">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-        <div className="relative overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl bg-slate-900 text-white">
+        <div className="relative overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl bg-[#1a2b3c] text-white">
           <div className="grid grid-cols-1 gap-6 sm:gap-0 lg:grid-cols-2">
             <div className="flex flex-col justify-center p-4 sm:p-8 md:p-12 lg:p-16">
               <div className="mb-4 sm:mb-6 flex items-center gap-2">
@@ -125,7 +102,7 @@ function PastSuccess() {
               <Button
                 asChild
                 size="sm"
-                className="w-fit bg-amber-500 px-4 sm:px-8 py-2 sm:py-4 font-bold text-xs sm:text-base text-slate-900 hover:bg-amber-500/90"
+                className="w-fit bg-amber-500 px-4 sm:px-8 py-2 sm:py-4 font-bold text-xs sm:text-base text-[#1a2b3c] hover:bg-amber-500/90"
               >
                 <Link href="#">
                   Read the 2022 Report
@@ -141,7 +118,7 @@ function PastSuccess() {
                   backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuAY13UuIr5P_XmSLOkOUYe8fPcL3zTdWdwlJAmOhBGc0WlKvaTvsl3kWp8ML7HDMXZvL0Y-SzEcMtkeBkgQiggt9DQEZh8VIH4u78j9lI6fwcbc2ZIOISu7mURLUIgmnoFAuEtdHLEHLIhmKRJszPBKTgwtROYhL2m8yPyILbZfGewO1njnq-w5Qgar1NZqxNrxXdhR2IHspUjho0f4Nm2Uj5gdTWdAZ3Vtrr7HTHhaMkcAOMSQhH51nLKgEDfZi345_9z2dQzmcWgU')`,
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-slate-900/20 lg:to-slate-900" />
+              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#1a2b3c]/20 lg:to-[#1a2b3c]" />
             </div>
           </div>
         </div>
@@ -152,13 +129,11 @@ function PastSuccess() {
 
 // --- Main Page Component ---
 
-export default async function MUNPage() {
-  const munEvents = await getMunEvents();
-
+export default function MUNPage() {
   return (
     <>
       <Navigation />
-      <main className="bg-white">
+      <main>
         {/* Hero Section */}
         <MUNHero />
 
@@ -168,7 +143,7 @@ export default async function MUNPage() {
             <div className="flex items-end justify-between mb-8 px-2">
               <div>
                 <h2 className="text-3xl font-bold mb-2">Upcoming Conferences</h2>
-                <p className="text-slate-600 font-medium">
+                <p className="text-gray-500 dark:text-gray-400 font-medium">
                   Join our upcoming sessions and represent a nation.
                 </p>
               </div>
@@ -184,7 +159,7 @@ export default async function MUNPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Conference Card 1 */}
-              <div className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+              <div className="group bg-white dark:bg-[#16191d] border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
                 <div
                   className="h-48 bg-cover bg-center relative"
                   style={{
@@ -192,7 +167,7 @@ export default async function MUNPage() {
                       'url("https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=800&h=600&fit=crop")',
                   }}
                 >
-                  <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-primary border border-slate-200">
+                  <div className="absolute top-4 right-4 bg-white/90 dark:bg-[#16191d]/90 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-primary">
                     Registration Open
                   </div>
                 </div>
@@ -204,7 +179,7 @@ export default async function MUNPage() {
                   <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
                     Addis Ababa MUN 2024
                   </h3>
-                  <p className="text-slate-600 text-sm mb-6 leading-relaxed">
+                  <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 leading-relaxed">
                     Theme: &quot;Resilient Infrastructure for a Sustainable Future in the Horn
                     of Africa.&quot;
                   </p>
@@ -215,7 +190,7 @@ export default async function MUNPage() {
               </div>
 
               {/* Conference Card 2 */}
-              <div className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+              <div className="group bg-white dark:bg-[#16191d] border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
                 <div
                   className="h-48 bg-cover bg-center relative"
                   style={{
@@ -223,7 +198,7 @@ export default async function MUNPage() {
                       'url("https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop")',
                   }}
                 >
-                  <div className="absolute top-4 right-4 bg-slate-100/90 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-600 border border-slate-200">
+                  <div className="absolute top-4 right-4 bg-gray-100/90 dark:bg-gray-800/90 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-gray-500">
                     Coming Soon
                   </div>
                 </div>
@@ -235,18 +210,18 @@ export default async function MUNPage() {
                   <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
                     Global Leadership Summit
                   </h3>
-                  <p className="text-slate-600 text-sm mb-6 leading-relaxed">
+                  <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 leading-relaxed">
                     A focus on youth representation in peace-building and diplomatic
                     mediation.
                   </p>
-                  <button className="w-full py-3 rounded-lg border-2 border-slate-200 text-slate-400 font-bold text-sm cursor-not-allowed">
+                  <button className="w-full py-3 rounded-lg border-2 border-gray-200 dark:border-gray-700 text-gray-400 font-bold text-sm cursor-not-allowed">
                     Notify Me
                   </button>
                 </div>
               </div>
 
               {/* Conference Card 3 */}
-              <div className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+              <div className="group bg-white dark:bg-[#16191d] border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
                 <div
                   className="h-48 bg-cover bg-center relative"
                   style={{
@@ -254,7 +229,7 @@ export default async function MUNPage() {
                       'url("https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=600&fit=crop")',
                   }}
                 >
-                  <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-primary border border-slate-200">
+                  <div className="absolute top-4 right-4 bg-white/90 dark:bg-[#16191d]/90 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest text-primary">
                     Registration Open
                   </div>
                 </div>
@@ -266,7 +241,7 @@ export default async function MUNPage() {
                   <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
                     Youth Assembly
                   </h3>
-                  <p className="text-slate-600 text-sm mb-6 leading-relaxed">
+                  <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 leading-relaxed">
                     Simulating the UN General Assembly to address urgent climate policy.
                   </p>
                   <button className="w-full py-3 rounded-lg border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white transition-all">
@@ -276,62 +251,12 @@ export default async function MUNPage() {
               </div>
             </div>
           </section>
+        </div>
 
-          {/* Upcoming MUN Events Section */}
-          <section id="team-events" className="mb-20">
-            <div className="flex items-end justify-between mb-8 px-2">
-              <div>
-                <h2 className="text-3xl font-bold mb-2">Upcoming MUN Events</h2>
-                <p className="text-gray-500 dark:text-gray-400 font-medium">
-                  Events created for the Model UN team.
-                </p>
-              </div>
-            </div>
+        {/* Past Success Section (Moved Below) */}
+        <PastSuccess />
 
-            {munEvents.length === 0 ? (
-              <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-[#16191d] p-8 text-center text-gray-500 dark:text-gray-400">
-                No upcoming MUN events yet.
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {munEvents.map((event: MunEvent) => (
-                  <div
-                    key={event.id}
-                    className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
-                  >
-                    <div
-                      className="h-48 bg-cover bg-center relative"
-                      style={{
-                        backgroundImage: `url('${event.image || "https://images.unsplash.com/photo-1519834785169-98be25ec3f84?w=800&h=600&fit=crop"}')`,
-                      }}
-                    />
-                    <div className="p-6">
-                      <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
-                        <span className="material-symbols-outlined text-sm">calendar_today</span>
-                        {new Date(event.date).toLocaleDateString()}
-                      </div>
-                      <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-                        {event.title}
-                      </h3>
-                      <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 leading-relaxed line-clamp-3">
-                        {event.description}
-                      </p>
-                      <Link
-                        href="/updates#events"
-                        className="w-full inline-flex items-center justify-center py-3 rounded-lg border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white transition-all"
-                      >
-                        Details
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-
-          {/* Past Success */}
-          <PastSuccess />
-
+        <div className="max-w-7xl mx-auto px-6">
           {/* Final CTA */}
           <section className="text-center py-20 px-6">
             <h2 className="text-4xl font-bold mb-4">Ready to take your seat?</h2>
@@ -340,13 +265,10 @@ export default async function MUNPage() {
               your professional career and the world&apos;s future.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/updates#events"
-                className="bg-primary text-white px-10 py-4 rounded-xl font-bold text-lg hover:shadow-2xl hover:shadow-primary/30 transition-all flex items-center gap-3"
-              >
+              <button className="bg-primary text-white px-10 py-4 rounded-xl font-bold text-lg hover:shadow-2xl hover:shadow-primary/30 transition-all flex items-center gap-3">
                 Register for Next MUN
                 <span className="material-symbols-outlined">person_add</span>
-              </Link>
+              </button>
               <button className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
                 Contact Organizer
               </button>

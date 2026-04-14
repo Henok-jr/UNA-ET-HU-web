@@ -69,7 +69,6 @@ interface EventItem {
   location: string | null;
   image: string | null;
   status: string;
-  team: 'GENERAL' | 'MUN' | 'SDG' | 'INNOVATION' | 'PROJECT' | 'DEBATE';
   createdAt: string;
 }
 
@@ -178,7 +177,6 @@ export default function AdminDashboard() {
     location: '',
     image: '',
     status: 'UPCOMING',
-    team: '',
   });
 
   const [createUserFormData, setCreateUserFormData] = useState({
@@ -489,7 +487,6 @@ export default function AdminDashboard() {
       location: '',
       image: '',
       status: 'UPCOMING',
-      team: '',
     });
     setShowEventModal(true);
   };
@@ -503,7 +500,6 @@ export default function AdminDashboard() {
       location: event.location || '',
       image: event.image || '',
       status: event.status || 'UPCOMING',
-      team: event.team || 'GENERAL',
     });
     setShowEventModal(true);
   };
@@ -899,7 +895,6 @@ export default function AdminDashboard() {
           location: eventFormData.location || null,
           image: eventFormData.image || null,
           status: eventFormData.status,
-          team: eventFormData.team,
         }),
       });
 
@@ -1908,7 +1903,7 @@ export default function AdminDashboard() {
                     <select
                       value={formData.status}
                       onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                      className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 pr-10 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                      className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                     >
                       <option value="DRAFT">Draft</option>
                       <option value="PUBLISHED">Published</option>
@@ -2336,52 +2331,27 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                    Team
-                  </label>
-                  <select
-                    required
-                    value={eventFormData.team}
-                    onChange={(e) => setEventFormData({ ...eventFormData, team: e.target.value })}
-                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  >
-                    <option value="" disabled>
-                      Select a team…
-                    </option>
-                    <option value="GENERAL">General</option>
-                    <option value="MUN">Model UN</option>
-                    <option value="SDG">SDG</option>
-                    <option value="INNOVATION">Innovation</option>
-                    <option value="PROJECT">Project</option>
-                    <option value="DEBATE">Debate</option>
-                  </select>
-                  <p className="mt-1 text-xs text-[#5e5f8d] dark:text-gray-400">
-                    Which team does this event belong to?
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
                     Status
                   </label>
                   <select
                     value={eventFormData.status}
                     onChange={(e) => setEventFormData({ ...eventFormData, status: e.target.value })}
-                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 pr-10 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   >
                     <option value="UPCOMING">UPCOMING</option>
                     <option value="ONGOING">ONGOING</option>
                     <option value="COMPLETED">COMPLETED</option>
                   </select>
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                  Image
-                </label>
-                <ImageUpload
-                  value={eventFormData.image}
-                  onChange={(url) => setEventFormData({ ...eventFormData, image: url })}
-                />
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Image
+                  </label>
+                  <ImageUpload
+                    value={eventFormData.image}
+                    onChange={(url) => setEventFormData({ ...eventFormData, image: url })}
+                  />
+                </div>
               </div>
 
               <div>

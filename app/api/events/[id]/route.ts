@@ -3,9 +3,6 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-const TEAM_VALUES = ['GENERAL', 'MUN', 'SDG', 'INNOVATION', 'PROJECT', 'DEBATE'] as const;
-type TeamValue = (typeof TEAM_VALUES)[number];
-
 // PUT: Update event (Admin/Super Admin)
 export async function PUT(
   request: Request,
@@ -29,18 +26,6 @@ export async function PUT(
     const image = typeof body.image === 'string' ? body.image : undefined;
     const status = typeof body.status === 'string' ? body.status : undefined;
 
-    const teamRaw = body.team !== undefined ? (typeof body.team === 'string' ? body.team : null) : undefined;
-    let team: TeamValue | undefined = undefined;
-    if (teamRaw !== undefined) {
-      if (!teamRaw) {
-        return NextResponse.json({ error: 'Team is required' }, { status: 400 });
-      }
-      if (!(TEAM_VALUES as readonly string[]).includes(teamRaw)) {
-        return NextResponse.json({ error: `Invalid team. Allowed: ${TEAM_VALUES.join(', ')}` }, { status: 400 });
-      }
-      team = teamRaw as TeamValue;
-    }
-
     const dateRaw = body.date !== undefined ? (typeof body.date === 'string' ? body.date : null) : undefined;
     let date: Date | undefined = undefined;
     if (dateRaw !== undefined) {
@@ -62,7 +47,6 @@ export async function PUT(
         location,
         image,
         status,
-        team,
         date,
       },
     });
