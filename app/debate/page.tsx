@@ -6,6 +6,9 @@ import EventFlipCard from "../components/innovation/EventFlipCard";
 const heroBackdrop =
   "linear-gradient(120deg, rgba(6,10,18,0.90) 0%, rgba(8,17,31,0.82) 42%, rgba(8,17,31,0.92) 100%), url(https://images.unsplash.com/photo-1573164574572-cb89e39749b4?auto=format&fit=crop&w=2200&q=80)";
 
+const debateTeamHeadImage =
+  "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=80";
+
 const debateEvents = [
   {
     title: "UN Charter Moot Session",
@@ -47,6 +50,75 @@ const stats = [
   { value: "15", label: "MOTION PACKS" },
   { value: "88%", label: "SPEAKER IMPROVEMENT" },
 ];
+
+function DebateAboutTeam() {
+  return (
+    <section id="about" className="bg-[#08111f] pb-16 pt-24 sm:pb-24 sm:pt-28">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="grid items-start gap-10 md:grid-cols-2 md:gap-12 lg:gap-14">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+              About the team
+            </p>
+            <p className="mt-4 text-lg font-semibold text-white">Head of Debate Team</p>
+            <p className="mt-1 text-base text-slate-400">Dr. Jane Doe</p>
+
+            <div className="mt-8 space-y-4 text-justify text-[15px] leading-relaxed text-slate-300 sm:text-base">
+              <p>
+                The Debate Team prepares delegates for high-pressure negotiation, structured rebuttal,
+                and evidence-based public speaking grounded in the UN Charter and diplomatic norms.
+              </p>
+              <p>
+                Through workshops and chamber simulations, members sharpen research discipline,
+                procedural fluency, and coalition strategy—while maintaining respectful,
+                solutions-focused dialogue.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex justify-center md:sticky md:top-24 md:justify-end">
+            <figure className="relative w-full max-w-md">
+              <div
+                className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-primary/40 to-transparent opacity-60 blur-xl"
+                aria-hidden
+              />
+              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#111d2f] shadow-2xl shadow-black/40">
+                <div className="aspect-[4/5] w-full">
+                  <Image
+                    src={debateTeamHeadImage}
+                    alt="Head of the Debate Team"
+                    width={720}
+                    height={900}
+                    className="h-full w-full object-cover object-top"
+                    sizes="(max-width: 768px) 100vw, 420px"
+                  />
+                </div>
+                <figcaption className="border-t border-white/10 bg-[#111d2f] px-5 py-4">
+                  <p className="text-sm font-semibold text-white">Dr. Jane Doe</p>
+                  <p className="text-xs text-slate-400">Head of Debate Team</p>
+                  <div className="mt-3 space-y-1 text-xs text-slate-300">
+                    <p>
+                      <span className="font-semibold text-white">Email:</span>{" "}
+                      <a className="text-primary hover:underline" href="mailto:debate@unaethu.org">
+                        debate@unaethu.org
+                      </a>
+                    </p>
+                    <p>
+                      <span className="font-semibold text-white">Phone:</span>{" "}
+                      <a className="text-primary hover:underline" href="tel:+251900000000">
+                        +251 900 000 000
+                      </a>
+                    </p>
+                  </div>
+                </figcaption>
+              </div>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function DebatePage() {
   return (
@@ -107,6 +179,8 @@ export default function DebatePage() {
             </div>
           </div>
         </section>
+
+        <DebateAboutTeam />
 
         <section
           id="events"

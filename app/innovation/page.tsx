@@ -2,9 +2,14 @@ import Image from "next/image";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import EventFlipCard from "../components/innovation/EventFlipCard";
+import { Button } from "@/components/ui/button";
+import { PlayCircle } from "lucide-react";
 
 const teamHeadImage =
   "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=80";
+
+const innovationHeroImage =
+  "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1920&q=80";
 
 const stats = [
   { value: "300+", label: "DELEGATES" },
@@ -53,6 +58,51 @@ export default function InnovationPage() {
     <>
       <Navigation />
       <main className="bg-[#0a1118] text-white">
+        {/* Hero */}
+        <header className="relative flex min-h-[600px] w-full items-center justify-center overflow-hidden">
+          <div className="absolute inset-0 z-0">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30 z-10" />
+            <div
+              className="h-full w-full bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url('${innovationHeroImage}')` }}
+            />
+          </div>
+          <div className="relative z-20 mx-auto flex max-w-7xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 backdrop-blur-md">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wider text-white">
+                Building better tools
+              </span>
+            </div>
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:max-w-4xl">
+              Innovation <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">
+                Team
+              </span>
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg font-medium leading-relaxed text-gray-200 sm:text-xl">
+              Designing digital solutions, improving accessibility, and strengthening how our
+              community engages with UN-style programs.
+            </p>
+            <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+              <Button size="lg" className="font-bold shadow-xl shadow-primary/20">
+                Explore Projects
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-white/10 border-white/20 text-white hover:bg-white/20 font-bold backdrop-blur-sm"
+              >
+                <PlayCircle className="mr-2 h-5 w-5" />
+                Watch Highlights
+              </Button>
+            </div>
+          </div>
+        </header>
+
         <section id="team" className="bg-[#0a1118] pb-16 pt-28 sm:pb-24 sm:pt-32">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="grid items-start gap-10 md:grid-cols-2 md:gap-12 lg:gap-14">
@@ -99,6 +149,23 @@ export default function InnovationPage() {
                     <figcaption className="border-t border-white/10 bg-[#121b26] px-5 py-4">
                       <p className="text-sm font-semibold text-white">Dr. Jane Doe</p>
                       <p className="text-xs text-slate-400">Head of Innovation Team</p>
+                      <div className="mt-3 space-y-1 text-xs text-slate-300">
+                        <p>
+                          <span className="font-semibold text-white">Email:</span>{" "}
+                          <a
+                            className="text-primary hover:underline"
+                            href="mailto:innovation@unaethu.org"
+                          >
+                            innovation@unaethu.org
+                          </a>
+                        </p>
+                        <p>
+                          <span className="font-semibold text-white">Phone:</span>{" "}
+                          <a className="text-primary hover:underline" href="tel:+251900000000">
+                            +251 900 000 000
+                          </a>
+                        </p>
+                      </div>
                     </figcaption>
                   </div>
                 </figure>

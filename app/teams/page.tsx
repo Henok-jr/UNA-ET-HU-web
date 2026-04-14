@@ -26,26 +26,36 @@ const teamHeads = [
     name: "Rose Kassa",
     role: "MUN Team Head",
     image: "/images/mnu.png",
+    phone: "",
+    email: "",
   },
   {
     name: "Yonatan Berihun",
     role: "Innovation Team Head",
     image: "/images/Inov.jpg",
+    phone: "",
+    email: "",
   },
   {
     name: "Kibrab Abera",
     role: "Project Team Head",
     image: "/images/proj.png",
+    phone: "",
+    email: "",
   },
   {
     name: "Abinet Girma",
     role: "SDG Ambassadors Head",
     image: "/images/sdg.png",
+    phone: "",
+    email: "",
   },
   {
     name: "Timihirt Shibiru", // Placeholder
     role: "Debate Team Head",
     image: "/images/deb.jpg",
+    phone: "",
+    email: "",
   },
 ];
 
@@ -153,6 +163,25 @@ export default function TeamsPage() {
                   <p className="text-xs font-semibold uppercase tracking-wider text-[#5e808d] dark:text-gray-500">
                     {member.role}
                   </p>
+
+                  <div className="mt-2 space-y-1 text-[11px] text-[#5e808d] dark:text-gray-400">
+                    {member.phone && (
+                      <a
+                        href={`tel:${member.phone}`}
+                        className="block font-semibold hover:text-primary hover:underline break-words"
+                      >
+                        {member.phone}
+                      </a>
+                    )}
+                    {member.email && (
+                      <a
+                        href={`mailto:${member.email}`}
+                        className="block font-semibold hover:text-primary hover:underline break-words"
+                      >
+                        {member.email}
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

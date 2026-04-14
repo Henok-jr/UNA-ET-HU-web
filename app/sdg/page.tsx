@@ -7,6 +7,9 @@ import Image from "next/image";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
+const sdgHeadImage =
+  "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=900&q=80";
+
 // --- Components ---
 
 function SDGHero() {
@@ -276,33 +279,91 @@ function SDGGrid() {
     );
 }
 
-function SDGCta() {
+function SDGAboutTeam() {
     return (
-        <section className="bg-[#212935] py-20">
-            <div className="max-w-4xl mx-auto px-6 text-center">
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                    Ready to make an impact?
-                </h2>
-                <p className="text-gray-300 text-lg mb-10 max-w-2xl mx-auto">
-                    Join a global network of changemakers. Whether you have 2 hours a week or 20, there is a
-                    place for you in our movement.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button size="lg" className="font-bold">
-                        Become an Ambassador
-                    </Button>
-                    <Button
-                        size="lg"
-                        variant="outline"
-                        className="bg-transparent border-white/20 text-white hover:bg-white/10 font-bold"
-                    >
-                        Contact Us
-                    </Button>
+        <section id="team" className="bg-[#0a1118] pb-16 pt-16 sm:pb-24">
+            <div className="mx-auto max-w-6xl px-4 sm:px-6">
+                <div className="grid items-start gap-10 md:grid-cols-2 md:gap-12 lg:gap-14">
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                            About the team
+                        </p>
+                        <p className="mt-4 text-lg font-semibold text-white">Head of SDG Team</p>
+                        <p className="mt-1 text-base text-slate-400">Dr. Jane Doe</p>
+
+                        {/* Email/Phone moved under the photo (figcaption) to match other team pages */}
+
+                        <div className="mt-8 space-y-4 text-justify text-[15px] leading-relaxed text-slate-300 sm:text-base">
+                            <p>
+                                The SDG Team leads community-centered initiatives aligned with the 17
+                                Sustainable Development Goals. We translate global commitments into
+                                measurable local action through awareness campaigns, service projects,
+                                partnerships, and youth-led advocacy.
+                            </p>
+                            <p>
+                                Members work in cross-functional groups to plan activities, measure
+                                outcomes, and communicate impact responsibly. We focus on inclusion,
+                                accountability, and practical solutions for lasting change.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-center md:sticky md:top-24 md:justify-end">
+                        <figure className="relative w-full max-w-md">
+                            <div
+                                className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-primary/40 to-transparent opacity-60 blur-xl"
+                                aria-hidden
+                            />
+                            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#121b26] shadow-2xl shadow-black/40">
+                                <div className="aspect-[4/5] w-full">
+                                    <Image
+                                        src={sdgHeadImage}
+                                        alt="Head of the SDG Team"
+                                        width={720}
+                                        height={900}
+                                        className="h-full w-full object-cover object-top"
+                                        priority
+                                        sizes="(max-width: 768px) 100vw, 420px"
+                                    />
+                                </div>
+                                <figcaption className="border-t border-white/10 bg-[#121b26] px-5 py-4">
+                                    <p className="text-sm font-semibold text-white">Dr. Jane Doe</p>
+                                    <p className="text-xs text-slate-400">Head of SDG Team</p>
+                                    <div className="mt-3 space-y-1 text-xs text-slate-300">
+                                        <p>
+                                            <span className="font-semibold text-white">Email:</span>{" "}
+                                            <a className="text-primary hover:underline" href="mailto:sdg@unaethu.org">
+                                                sdg@unaethu.org
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <span className="font-semibold text-white">Phone:</span>{" "}
+                                            <a className="text-primary hover:underline" href="tel:+251900000000">
+                                                +251 900 000 000
+                                            </a>
+                                        </p>
+                                    </div>
+                                </figcaption>
+                            </div>
+                        </figure>
+                    </div>
                 </div>
             </div>
         </section>
     );
 }
+
+const sdgColors: Record<number, string> = {
+    1: "#E5243B",
+    2: "#DDA63A",
+    3: "#4C9F38",
+    4: "#C5192D",
+    5: "#FF3A21",
+    10: "#DD1367",
+    13: "#3F7E44",
+    16: "#00689D",
+    17: "#19486A",
+};
 
 const ambassadors = [
     {
@@ -330,18 +391,6 @@ const ambassadors = [
         sdgs: [13, 17],
     },
 ];
-
-const sdgColors: Record<number, string> = {
-    1: "#E5243B",
-    2: "#DDA63A",
-    3: "#4C9F38",
-    4: "#C5192D",
-    5: "#FF3A21",
-    10: "#DD1367",
-    13: "#3F7E44",
-    16: "#00689D",
-    17: "#19486A",
-};
 
 function LeadAmbassadors() {
     return (
@@ -473,6 +522,34 @@ function ImpactInitiatives() {
     );
 }
 
+function SDGCta() {
+  return (
+    <section className="py-20 bg-[#0a1118] border-t border-white/10">
+      <div className="max-w-4xl mx-auto px-4 text-center">
+        <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
+          Ready to take action for the SDGs?
+        </h2>
+        <p className="text-slate-300 text-lg mb-10">
+          Join our campaigns, workshops, and community initiatives. Become part of a team
+          that turns the Global Goals into local results.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Button size="lg" className="font-bold shadow-xl shadow-primary/20">
+            Join the SDG Team
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="bg-white/10 border-white/20 text-white hover:bg-white/20 font-bold backdrop-blur-sm"
+          >
+            Learn More
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // --- Main Page Component ---
 
 export default function SDGPage() {
@@ -480,7 +557,12 @@ export default function SDGPage() {
         <>
             <Navigation />
             <main>
+                {/* Hero */}
                 <SDGHero />
+
+                {/* About the Team */}
+                <SDGAboutTeam />
+
                 <SDGGrid />
                 <ImpactInitiatives />
                 <LeadAmbassadors />

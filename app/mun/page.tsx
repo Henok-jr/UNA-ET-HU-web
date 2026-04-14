@@ -5,8 +5,12 @@ import Footer from '../components/Footer';
 import Link from 'next/link';
 import { Award, BookOpen, PlayCircle, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Image from 'next/image';
 
 // --- Components ---
+
+const munHeadImage =
+  "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=900&q=80";
 
 function MUNHero() {
   return (
@@ -66,65 +70,125 @@ const stats = [
 
 function PastSuccess() {
   return (
-    <section className="bg-card py-20 border-t border-gray-100 dark:border-gray-800">
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-        <div className="relative overflow-hidden rounded-xl sm:rounded-2xl md:rounded-3xl bg-[#1a2b3c] text-white">
-          <div className="grid grid-cols-1 gap-6 sm:gap-0 lg:grid-cols-2">
-            <div className="flex flex-col justify-center p-4 sm:p-8 md:p-12 lg:p-16">
-              <div className="mb-4 sm:mb-6 flex items-center gap-2">
-                <Award className="size-4 sm:size-5 text-amber-400" />
-                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">
-                  Historical Milestone
-                </span>
+    <section id="milestones" className="border-t border-white/10 bg-[#121b26] py-14 sm:py-16">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div>
+          <p className="inline-flex w-fit items-center rounded-md border border-yellow-300/35 bg-yellow-300/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-yellow-300">
+            Historical Milestone
+          </p>
+
+          <h2 className="mt-6 font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-white">
+            2022 Diplomatic Conference
+          </h2>
+          <p className="mt-4 text-sm sm:text-base leading-relaxed text-slate-300">
+            Reflecting on the monumental success of the 2022 summit held in
+            Budapest, where over 300 delegates from 45 universities
+            collaborated on revolutionary resolutions for maritime security.
+          </p>
+
+          <div className="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6">
+            {stats.map((s) => (
+              <div key={s.label} className="text-center sm:text-left">
+                <p className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                  {s.value}
+                </p>
+                <p className="mt-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
+                  {s.label}
+                </p>
               </div>
-              <h2 className="mb-4 sm:mb-6 font-serif text-2xl sm:text-3xl md:text-4xl font-bold">
-                2022 Diplomatic Conference
-              </h2>
-              <p className="mb-6 sm:mb-8 text-xs sm:text-sm md:text-base leading-relaxed text-gray-300">
-                Reflecting on the monumental success of the 2022 summit held in
-                Budapest, where over 300 delegates from 45 universities
-                collaborated on revolutionary resolutions for maritime security.
-              </p>
+            ))}
+          </div>
 
-              <div className="mb-6 sm:mb-10 grid grid-cols-3 gap-4 sm:gap-6 border-y border-white/10 py-4 sm:py-8">
-                {stats.map((stat) => (
-                  <div key={stat.label}>
-                    <div className="mb-0.5 sm:mb-1 font-serif text-xl sm:text-2xl md:text-3xl font-bold">
-                      {stat.value}
-                    </div>
-                    <div className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <Button
-                asChild
-                size="sm"
-                className="w-fit bg-amber-500 px-4 sm:px-8 py-2 sm:py-4 font-bold text-xs sm:text-base text-[#1a2b3c] hover:bg-amber-500/90"
-              >
-                <Link href="#">
-                  Read the 2022 Report
-                  <BookOpen className="ml-2 size-3 sm:size-4" />
-                </Link>
-              </Button>
-            </div>
-
-            <div className="relative hidden min-h-[300px] sm:min-h-[400px] lg:block">
-              <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{
-                  backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuAY13UuIr5P_XmSLOkOUYe8fPcL3zTdWdwlJAmOhBGc0WlKvaTvsl3kWp8ML7HDMXZvL0Y-SzEcMtkeBkgQiggt9DQEZh8VIH4u78j9lI6fwcbc2ZIOISu7mURLUIgmnoFAuEtdHLEHLIhmKRJszPBKTgwtROYhL2m8yPyILbZfGewO1njnq-w5Qgar1NZqxNrxXdhR2IHspUjho0f4Nm2Uj5gdTWdAZ3Vtrr7HTHhaMkcAOMSQhH51nLKgEDfZi345_9z2dQzmcWgU')`,
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#1a2b3c]/20 lg:to-[#1a2b3c]" />
-            </div>
+          <div className="mt-10">
+            <Button
+              asChild
+              size="sm"
+              className="w-fit bg-amber-500 px-4 sm:px-8 py-2 sm:py-4 font-bold text-xs sm:text-base text-slate-900 hover:bg-amber-500/90"
+            >
+              <Link href="#">
+                Read the 2022 Report
+                <BookOpen className="ml-2 size-3 sm:size-4" />
+              </Link>
+            </Button>
           </div>
         </div>
       </div>
     </section>
   )
+}
+
+function MUNAboutTeam() {
+  return (
+    <section id="team" className="bg-[#0a1118] pb-16 pt-16 sm:pb-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="grid items-start gap-10 md:grid-cols-2 md:gap-12 lg:gap-14">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+              About the team
+            </p>
+            <p className="mt-4 text-lg font-semibold text-white">Head of MUN Team</p>
+            <p className="mt-1 text-base text-slate-400">Dr. Jane Doe</p>
+
+            {/* Contact info moved under the photo (figcaption) */}
+
+            <div className="mt-8 space-y-4 text-justify text-[15px] leading-relaxed text-slate-300 sm:text-base">
+              <p>
+                The Model United Nations (MUN) Team empowers students to explore global
+                issues through diplomacy, negotiation, and structured debate. We train
+                delegates in research, rules of procedure, and coalition-building to
+                represent countries with confidence and professionalism.
+              </p>
+              <p>
+                Through simulations, workshops, and conferences, members develop
+                leadership, public speaking, and policy-writing skills while fostering a
+                culture of respect, collaboration, and international understanding.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex justify-center md:sticky md:top-24 md:justify-end">
+            <figure className="relative w-full max-w-md">
+              <div
+                className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-primary/40 to-transparent opacity-60 blur-xl"
+                aria-hidden
+              />
+              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#121b26] shadow-2xl shadow-black/40">
+                <div className="aspect-[4/5] w-full">
+                  <Image
+                    src={munHeadImage}
+                    alt="Head of the MUN Team"
+                    width={720}
+                    height={900}
+                    className="h-full w-full object-cover object-top"
+                    priority
+                    sizes="(max-width: 768px) 100vw, 420px"
+                  />
+                </div>
+                <figcaption className="border-t border-white/10 bg-[#121b26] px-5 py-4">
+                  <p className="text-sm font-semibold text-white">Dr. Jane Doe</p>
+                  <p className="text-xs text-slate-400">Head of MUN Team</p>
+                  <div className="mt-3 space-y-1 text-xs text-slate-300">
+                    <p>
+                      <span className="font-semibold text-white">Email:</span>{" "}
+                      <a className="text-primary hover:underline" href="mailto:mun@unaethu.org">
+                        mun@unaethu.org
+                      </a>
+                    </p>
+                    <p>
+                      <span className="font-semibold text-white">Phone:</span>{" "}
+                      <a className="text-primary hover:underline" href="tel:+251900000000">
+                        +251 900 000 000
+                      </a>
+                    </p>
+                  </div>
+                </figcaption>
+              </div>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 // --- Main Page Component ---
@@ -136,6 +200,9 @@ export default function MUNPage() {
       <main>
         {/* Hero Section */}
         <MUNHero />
+
+        {/* About the Team */}
+        <MUNAboutTeam />
 
         <div className="max-w-7xl mx-auto px-6 pt-16">
           {/* Upcoming Conferences */}
