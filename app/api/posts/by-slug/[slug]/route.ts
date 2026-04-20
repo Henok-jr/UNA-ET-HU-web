@@ -13,7 +13,20 @@ export async function GET(
 
     const post = await prisma.blogPost.findUnique({
       where: { slug },
-      include: {
+      // IMPORTANT: do NOT read teamId yet; existing rows contain null team_id and the
+      // current Prisma runtime is erroring while converting that field.
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        content: true,
+        category: true,
+        featuredImage: true,
+        orientation: true,
+        status: true,
+        publishedAt: true,
+        createdAt: true,
         author: {
           select: {
             id: true,
@@ -23,17 +36,23 @@ export async function GET(
         },
         likes: true,
         comments: {
-          where: { parentId: null }, // Fetch top-level comments
+          where: { parentId: null },
           orderBy: { createdAt: 'desc' },
-          include: {
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
             author: { select: { id: true, fullName: true, avatar: true } },
             likes: true,
             replies: {
-              include: {
+              orderBy: { createdAt: 'asc' },
+              select: {
+                id: true,
+                content: true,
+                createdAt: true,
                 author: { select: { id: true, fullName: true, avatar: true } },
                 likes: true,
               },
-              orderBy: { createdAt: 'asc' },
             },
           },
         },

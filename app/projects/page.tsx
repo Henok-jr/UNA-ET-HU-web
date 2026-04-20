@@ -2,6 +2,7 @@ import Image from "next/image";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import EventFlipCard from "../components/innovation/EventFlipCard";
+import Link from "next/link";
 
 const teamHeadImage =
   "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=900&q=80";
@@ -84,6 +85,15 @@ function ProjectHero() {
           Turning ideas into measurable initiatives through planning, partnerships, and accountable
           delivery.
         </p>
+
+        <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+          <Link
+            href="/auth/signup"
+            className="inline-flex items-center justify-center rounded-xl bg-primary px-7 py-3 text-sm font-bold text-white shadow-[0_0_24px_rgba(0,163,255,0.35)] transition hover:bg-primary/90"
+          >
+            Join Project Team
+          </Link>
+        </div>
       </div>
     </header>
   );

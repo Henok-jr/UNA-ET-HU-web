@@ -36,11 +36,12 @@ function BlogContent() {
 
   const [postsData, setPostsData] = useState<PostsResponse | null>(null);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState(searchParams.get('q') || '');
-  const [category, setCategory] = useState(searchParams.get('category') || 'all');
-  const [page, setPage] = useState(
-    parseInt(searchParams.get('page') || '1', 10) || 1,
-  );
+  const [showEmpty, setShowEmpty] = useState(false);
+
+  // Single source of truth: URL query params
+  const search = searchParams.get('q') || '';
+  const category = searchParams.get('category') || 'all';
+  const page = parseInt(searchParams.get('page') || '1', 10) || 1;
 
   // Available categories (could also be fetched dynamically)
   const categories = useMemo(
@@ -59,6 +60,7 @@ function BlogContent() {
 
     async function fetchPosts() {
       try {
+        // Keep showing previous items while fetching new ones to avoid a misleading empty state flash
         setLoading(true);
         const params = new URLSearchParams();
         params.set('page', String(page));
@@ -74,6 +76,7 @@ function BlogContent() {
         }
         const data: PostsResponse = await res.json();
         setPostsData(data);
+        setShowEmpty(data.total === 0);
       } catch (error) {
         if ((error as any).name !== 'AbortError') {
           console.error(error);
@@ -84,26 +87,31 @@ function BlogContent() {
     }
 
     fetchPosts();
-
-    // Sync URL query
-    const qp = new URLSearchParams();
-    if (search) qp.set('q', search);
-    if (category && category !== 'all') qp.set('category', category);
-    if (page !== 1) qp.set('page', String(page));
-    const qs = qp.toString();
-    router.replace(qs ? `/blog?${qs}` : '/blog');
-
     return () => controller.abort();
-  }, [search, category, page, router]);
+  }, [search, category, page]);
 
   const handleCategoryClick = (id: string) => {
-    setCategory(id);
-    setPage(1);
+    const qp = new URLSearchParams(searchParams);
+    if (id && id !== 'all') qp.set('category', id);
+    else qp.delete('category');
+    qp.delete('page');
+    router.push(qp.toString() ? `/blog?${qp.toString()}` : '/blog');
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setPage(1);
+    const qp = new URLSearchParams(searchParams);
+    // search is controlled in the input via onChange below by updating URL
+    qp.delete('page');
+    router.push(qp.toString() ? `/blog?${qp.toString()}` : '/blog');
+  };
+
+  const handleSearchChange = (value: string) => {
+    const qp = new URLSearchParams(searchParams);
+    if (value) qp.set('q', value);
+    else qp.delete('q');
+    qp.delete('page');
+    router.push(qp.toString() ? `/blog?${qp.toString()}` : '/blog');
   };
 
   const totalPages = postsData?.totalPages ?? 1;
@@ -157,7 +165,7 @@ function BlogContent() {
                   type="text"
                   placeholder="Search articles, topics, keywords..."
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#111827] text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary/60"
                 />
               </div>
@@ -172,7 +180,7 @@ function BlogContent() {
           </div>
         )}
 
-        {!loading && items.length === 0 && (
+        {showEmpty && (
           <div className="py-16 text-center text-slate-500 dark:text-slate-400">
             <p className="text-lg font-semibold mb-2">No articles found</p>
             <p className="text-sm">
@@ -334,7 +342,13 @@ function BlogContent() {
                 </p>
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    onClick={() => {
+                      const qp = new URLSearchParams(searchParams);
+                      const next = Math.max(1, page - 1);
+                      if (next === 1) qp.delete('page');
+                      else qp.set('page', String(next));
+                      router.push(qp.toString() ? `/blog?${qp.toString()}` : '/blog');
+                    }}
                     disabled={page === 1}
                     className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800"
                   >
@@ -342,7 +356,13 @@ function BlogContent() {
                     Prev
                   </button>
                   <button
-                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    onClick={() => {
+                      const qp = new URLSearchParams(searchParams);
+                      const next = Math.min(totalPages, page + 1);
+                      if (next === 1) qp.delete('page');
+                      else qp.set('page', String(next));
+                      router.push(qp.toString() ? `/blog?${qp.toString()}` : '/blog');
+                    }}
                     disabled={page === totalPages}
                     className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800"
                   >
