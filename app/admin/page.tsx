@@ -84,6 +84,11 @@ interface User {
   };
 }
 
+interface Team {
+  id: string;
+  name: string;
+}
+
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
   // Safe cast for extended user properties
@@ -96,6 +101,7 @@ export default function AdminDashboard() {
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [reports, setReports] = useState<AnnualReport[]>([]);
   const [events, setEvents] = useState<EventItem[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
 
   // Delete Confirmation State
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
@@ -135,6 +141,7 @@ export default function AdminDashboard() {
     status: 'DRAFT',
     featuredImage: '',
     orientation: 'LANDSCAPE',
+    teamId: '',
   });
 
   const [heroFormData, setHeroFormData] = useState({
@@ -196,6 +203,7 @@ export default function AdminDashboard() {
     if (session) {
       if (activeTab === 'blog') {
         fetchPosts();
+        fetchTeams();
       } else if (activeTab === 'users' && (session.user as any).role === 'SUPER_ADMIN') {
         fetchUsers();
       } else if (activeTab === 'hero') {
@@ -348,6 +356,17 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchTeams = async () => {
+    try {
+      const response = await fetch('/api/teams');
+      if (!response.ok) return;
+      const data = await response.json();
+      setTeams(Array.isArray(data) ? data : data.items ?? []);
+    } catch (error) {
+      console.error('Error fetching teams:', error);
+    }
+  };
+
   const handleCreate = () => {
     setEditingPost(null);
     setFormData({
@@ -358,6 +377,7 @@ export default function AdminDashboard() {
       status: 'DRAFT',
       featuredImage: '',
       orientation: 'LANDSCAPE',
+      teamId: '',
     });
     setShowModal(true);
   };
@@ -387,8 +407,13 @@ export default function AdminDashboard() {
           status: data.status,
           featuredImage: data.featuredImage || '',
           orientation: data.orientation || 'LANDSCAPE',
+          teamId: data.teamId || '',
         });
         setShowModal(true);
+      })
+      .catch((err) => {
+        console.error('Error fetching post:', err);
+        toast.error('Failed to load post');
       });
   };
 
@@ -719,6 +744,11 @@ export default function AdminDashboard() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!formData.teamId) {
+      toast.error('Please select a team');
+      return;
+    }
+
     const loadingToast = toast.loading(editingPost ? 'Updating post...' : 'Creating post...');
 
     try {
@@ -743,6 +773,7 @@ export default function AdminDashboard() {
           status: 'DRAFT',
           featuredImage: '',
           orientation: 'LANDSCAPE',
+          teamId: '',
         });
       } else {
         const error = await response.json();
@@ -1817,6 +1848,144 @@ export default function AdminDashboard() {
           )}
         </div>
       </main>
+
+      {/* Post Create/Edit Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-3xl rounded-2xl bg-white dark:bg-[#0f0f23] shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 p-5">
+              <h3 className="text-lg font-bold text-[#101018] dark:text-white">
+                {editingPost ? 'Edit Post' : 'Add New Post'}
+              </h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className="rounded-lg p-2 text-[#5e5f8d] hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/10"
+                aria-label="Close"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-5 space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-[#101018] dark:text-white mb-1">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  className="w-full h-10 rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[#101018] dark:text-white mb-1">
+                  Excerpt
+                </label>
+                <textarea
+                  value={formData.excerpt}
+                  onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 p-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  rows={2}
+                  placeholder="Short description for the post"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[#101018] dark:text-white mb-1">
+                  Content
+                </label>
+                <textarea
+                  value={formData.content}
+                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 p-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  rows={4}
+                  placeholder="Main content of the post"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[#101018] dark:text-white mb-1">
+                  Category
+                </label>
+                <input
+                  type="text"
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  className="w-full h-10 rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder="e.g., Technology, Health"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[#101018] dark:text-white mb-1">
+                  Status
+                </label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                  className="h-10 w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="DRAFT">Draft</option>
+                  <option value="PUBLISHED">Published</option>
+                  <option value="ARCHIVED">Archived</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[#101018] dark:text-white mb-1">
+                  Featured Image
+                </label>
+                <div className="mb-4">
+                  <ImageUpload
+                    value={formData.featuredImage}
+                    onChange={(url) => setFormData({ ...formData, featuredImage: url })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[#101018] dark:text-white mb-1">
+                  Team
+                </label>
+                <select
+                  value={formData.teamId}
+                  onChange={(e) => setFormData({ ...formData, teamId: e.target.value })}
+                  className="h-10 w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  required
+                >
+                  <option value="">Select a team...</option>
+                  {teams.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="inline-flex h-10 items-center justify-center rounded-lg border border-black/10 dark:border-white/10 px-5 text-sm font-semibold text-[#101018] dark:text-white hover:bg-black/5 dark:hover:bg-white/10"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90"
+                >
+                  {editingPost ? 'Save Changes' : 'Create Post'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
