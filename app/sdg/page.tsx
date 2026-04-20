@@ -6,7 +6,10 @@ import { PlayCircle, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
+<<<<<<< HEAD
+=======
 import Link from "next/link";
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
 const sdgHeadImage =
   "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=900&q=80";
@@ -46,8 +49,13 @@ function SDGHero() {
                     through the 17 Sustainable Development Goals.
                 </p>
                 <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+<<<<<<< HEAD
+                    <Button size="lg" className="font-bold shadow-xl shadow-primary/20">
+                        See Our Impact
+=======
                     <Button asChild size="lg" className="font-bold shadow-xl shadow-primary/20">
                         <Link href="/auth/signup">Join the SDG Team</Link>
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                     </Button>
                     <Button
                         size="lg"
@@ -438,6 +446,94 @@ function LeadAmbassadors() {
     );
 }
 
+<<<<<<< HEAD
+const initiatives = [
+    {
+        title: "Green Hiking at Mt. Tabor",
+        description:
+            "Promoting eco-tourism and mental well-being while cleaning up trails. A monthly event that combines physical health with environmental stewardship.",
+        image: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80",
+        goals: [15, 3],
+    },
+    {
+        title: "Autism Center Visits",
+        description:
+            "Regular visits to support local autism centers, fostering inclusivity and reducing inequalities through education, play, and community support.",
+        image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80",
+        goals: [10, 3],
+    },
+    {
+        title: "Climate Change Monday",
+        description:
+            "Weekly awareness campaigns on campus to educate students on carbon footprints and small actionable steps to combat climate change.",
+        image: "https://images.unsplash.com/photo-1569163139599-0f4517e36f51?w=800&q=80",
+        goals: [13],
+    },
+];
+
+const goalColors: Record<number, string> = {
+    3: "#4C9F38",
+    10: "#DD1367",
+    13: "#3F7E44",
+    15: "#56C02B",
+};
+
+function ImpactInitiatives() {
+    return (
+        <section className="bg-muted py-24">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="mb-12">
+                    <span className="text-sm font-bold uppercase tracking-wider text-primary">In Action</span>
+                    <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Impact Initiatives</h2>
+                </div>
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    {initiatives.map((initiative) => (
+                        <div
+                            key={initiative.title}
+                            className="group flex flex-col overflow-hidden rounded-2xl bg-card shadow-sm transition-all hover:shadow-xl"
+                        >
+                            <div className="relative h-64 overflow-hidden">
+                                <div className="absolute top-4 left-4 z-10 flex gap-2">
+                                    {initiative.goals.map((goal) => (
+                                        <span
+                                            key={goal}
+                                            className="inline-flex items-center rounded-md px-2 py-1 text-xs font-bold text-white"
+                                            style={{ backgroundColor: goalColors[goal] }}
+                                        >
+                                            Goal {goal}
+                                        </span>
+                                    ))}
+                                </div>
+                                <Image
+                                    src={initiative.image || "/placeholder.svg"}
+                                    alt={initiative.title}
+                                    fill
+                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                />
+                            </div>
+                            <div className="flex flex-col flex-grow p-6">
+                                <h3 className="text-xl font-bold mb-3">{initiative.title}</h3>
+                                <p className="text-muted-foreground text-sm leading-relaxed flex-grow">
+                                    {initiative.description}
+                                </p>
+                                <a
+                                    href="#"
+                                    className="mt-4 inline-flex items-center gap-2 text-primary font-bold text-sm group/link"
+                                >
+                                    Read Story
+                                    <ArrowRight className="h-4 w-4 transition-transform group-hover/link:translate-x-1" />
+                                </a>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+}
+
+=======
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 function SDGCta() {
   return (
     <section className="py-20 bg-[#0a1118] border-t border-white/10">
@@ -480,6 +576,10 @@ export default function SDGPage() {
                 <SDGAboutTeam />
 
                 <SDGGrid />
+<<<<<<< HEAD
+                <ImpactInitiatives />
+=======
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                 <LeadAmbassadors />
                 <SDGCta />
             </main>

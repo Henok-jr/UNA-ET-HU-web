@@ -11,6 +11,13 @@ export default function SignUpPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: '',
+<<<<<<< HEAD
+    phoneNumber: '',
+    year: '',
+    department: '',
+    team: '',
+=======
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
     email: '',
     password: '',
     confirmPassword: '',
@@ -41,7 +48,10 @@ export default function SignUpPage() {
     const loadingToast = toast.loading('Creating your account...');
 
     try {
+<<<<<<< HEAD
+=======
       // Create account
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -49,6 +59,13 @@ export default function SignUpPage() {
           email: formData.email,
           password: formData.password,
           fullName: formData.fullName,
+<<<<<<< HEAD
+          phoneNumber: formData.phoneNumber,
+          year: formData.year,
+          department: formData.department,
+          team: formData.team,
+=======
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
         }),
       });
 
@@ -61,8 +78,109 @@ export default function SignUpPage() {
       }
 
       toast.success('Account created successfully!', { id: loadingToast });
+<<<<<<< HEAD
+      console.log('Signup successful');
+
+      try {
+        const googleSheetsPayload = {
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phoneNumber,
+          department: formData.department,
+          year: formData.year,
+          team: formData.team,
+        };
+
+        console.log('Sending data to Google Sheets', googleSheetsPayload);
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+        let sheetsResponse: Response;
+        try {
+          sheetsResponse = await fetch(
+            'https://script.google.com/macros/s/AKfycbx5TkLi04qM5-yfAK7i9TmdyFSG5faLoH5LMuX__naQnkxidYkAqsRLGT3-6B4WG_o/exec',
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(googleSheetsPayload),
+              signal: controller.signal,
+              redirect: 'follow',
+              cache: 'no-store',
+            }
+          );
+        } finally {
+          clearTimeout(timeoutId);
+        }
+
+        console.log('Google Sheets response status', sheetsResponse.status);
+        const responseText = await sheetsResponse.text().catch(() => '');
+        console.log('Google Sheets response text', responseText);
+
+        let responseJson: any = null;
+        if (responseText) {
+          try {
+            responseJson = JSON.parse(responseText);
+          } catch {
+            responseJson = null;
+          }
+        }
+        if (responseJson !== null) {
+          console.log('Google Sheets response JSON', responseJson);
+        }
+
+        if (!sheetsResponse.ok) {
+          throw new Error(`Google Sheets request failed (${sheetsResponse.status}): ${responseText}`);
+        }
+
+        console.log('Google Sheets success');
+      } catch (googleError) {
+        console.error('Google Sheets error:', googleError);
+
+        const isLikelyCorsOrNetworkError =
+          googleError instanceof TypeError ||
+          (googleError instanceof Error &&
+            /failed to fetch|networkerror|load failed|cors/i.test(googleError.message));
+
+        if (isLikelyCorsOrNetworkError) {
+          console.warn(
+            'Google Sheets request likely blocked by CORS/network. Retrying with no-cors fallback...'
+          );
+
+          try {
+            await fetch(
+              'https://script.google.com/macros/s/AKfycbx5TkLi04qM5-yfAK7i9TmdyFSG5faLoH5LMuX__naQnkxidYkAqsRLGT3-6B4WG_o/exec',
+              {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                  fullName: formData.fullName,
+                  email: formData.email,
+                  phone: formData.phoneNumber,
+                  department: formData.department,
+                  year: formData.year,
+                  team: formData.team,
+                }),
+                redirect: 'follow',
+                cache: 'no-store',
+              }
+            );
+
+            console.log('Google Sheets success (no-cors fallback)');
+          } catch (fallbackError) {
+            console.error('Google Sheets fallback error:', fallbackError);
+            toast.error('Account created, but failed to save registration details to Google Sheets.');
+          }
+        } else {
+          toast.error('Account created, but failed to save registration details to Google Sheets.');
+        }
+      }
+
+=======
 
       // Auto sign in after successful signup
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
       const signInToast = toast.loading('Signing you in...');
       const result = await signIn('credentials', {
         email: formData.email,
@@ -97,7 +215,10 @@ export default function SignUpPage() {
       <Navigation />
       <div className="flex-1 flex flex-col items-center justify-center p-6">
         <div className="flex flex-col items-center w-full max-w-[460px] mx-auto py-12">
+<<<<<<< HEAD
+=======
           {/* Branding Header */}
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
           <div className="flex items-center gap-3 mb-10">
             <div className="size-10 bg-primary rounded-lg flex items-center justify-center text-white">
               <svg
@@ -117,7 +238,10 @@ export default function SignUpPage() {
             </h2>
           </div>
 
+<<<<<<< HEAD
+=======
           {/* Central Auth Card (Sign Up) */}
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
           <div className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1a1d23] w-full rounded-xl p-8 shadow-sm">
             <div className="mb-8 text-center lg:text-left">
               <h1 className="text-[#101618] dark:text-white text-2xl font-bold leading-tight mb-2">
@@ -128,12 +252,19 @@ export default function SignUpPage() {
               </p>
             </div>
 
+<<<<<<< HEAD
+=======
             {/* Google Sign In Button */}
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
             <button
               type="button"
               onClick={handleGoogleSignIn}
               disabled={googleLoading || loading}
+<<<<<<< HEAD
+              className="w-full mb-4 flex items-center justify-center gap-3 bg-white dark:bg-[#2d333b] border border-gray-200 dark:border-gray-700 text-[#101618] dark:text-white rounded-lg h-12 font-semibold transition-colors hover:bg-gray-50 dark:hover:bg-[#3d4149] disabled:opacity-50 disabled:cursor-not-allowed"
+=======
               className="w-full mb-4 flex items-center justify-center gap-3 bg-white dark:bg-[#2d3139] border border-gray-200 dark:border-gray-700 text-[#101618] dark:text-white rounded-lg h-12 font-semibold transition-colors hover:bg-gray-50 dark:hover:bg-[#3d4149] disabled:opacity-50 disabled:cursor-not-allowed"
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
             >
               {googleLoading ? (
                 <>
@@ -188,10 +319,83 @@ export default function SignUpPage() {
                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                   placeholder="John Doe"
                   disabled={loading || googleLoading}
+<<<<<<< HEAD
+                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#101618] dark:text-gray-200 text-sm font-semibold">
+                    Phone Number
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.phoneNumber}
+                    onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                    placeholder="(555) 555-5555"
+                    disabled={loading || googleLoading}
+                    className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[#101618] dark:text-gray-200 text-sm font-semibold">
+                    Year
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.year}
+                    onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                    placeholder="1"
+                    disabled={loading || googleLoading}
+                    className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[#101618] dark:text-gray-200 text-sm font-semibold">
+                  Department
+                </label>
+                <input
+                  type="text"
+                  value={formData.department}
+                  onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                  placeholder="Department"
+                  disabled={loading || googleLoading}
+                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[#101618] dark:text-gray-200 text-sm font-semibold">
+                  Team *
+                </label>
+                <select
+                  required
+                  value={formData.team}
+                  onChange={(e) => setFormData({ ...formData, team: e.target.value })}
+                  disabled={loading || googleLoading}
+                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none disabled:opacity-50"
+                >
+                  <option value="" disabled className="text-gray-400">
+                    Select a team
+                  </option>
+                  <option value="Model UN Team">Model UN Team</option>
+                  <option value="SDG Ambassadors">SDG Ambassadors</option>
+                  <option value="Innovation Team">Innovation Team</option>
+                  <option value="Debate Team">Debate Team</option>
+                  <option value="Project Team">Project Team</option>
+                </select>
+              </div>
+
+=======
                   className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d3139] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
                 />
               </div>
 
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
               <div className="flex flex-col gap-1.5">
                 <label className="text-[#101618] dark:text-gray-200 text-sm font-semibold">
                   Email Address *
@@ -203,7 +407,11 @@ export default function SignUpPage() {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="your.email@example.com"
                   disabled={loading || googleLoading}
+<<<<<<< HEAD
+                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
+=======
                   className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d3139] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                 />
               </div>
 
@@ -218,7 +426,11 @@ export default function SignUpPage() {
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder="••••••••"
                   disabled={loading || googleLoading}
+<<<<<<< HEAD
+                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none disabled:opacity-50"
+=======
                   className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d3139] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none disabled:opacity-50"
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                 />
               </div>
 
@@ -233,7 +445,11 @@ export default function SignUpPage() {
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   placeholder="••••••••"
                   disabled={loading || googleLoading}
+<<<<<<< HEAD
+                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none disabled:opacity-50"
+=======
                   className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d3139] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none disabled:opacity-50"
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                 />
               </div>
 
@@ -289,7 +505,10 @@ export default function SignUpPage() {
           </div>
         </div>
 
+<<<<<<< HEAD
+=======
         {/* Background Decoration */}
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
         <div className="fixed top-0 left-0 w-full h-full -z-10 opacity-[0.03] pointer-events-none select-none overflow-hidden">
           <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary rounded-full blur-[120px]"></div>
           <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-primary rounded-full blur-[120px]"></div>

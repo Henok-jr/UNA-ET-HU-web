@@ -84,11 +84,14 @@ interface User {
   };
 }
 
+<<<<<<< HEAD
+=======
 interface Team {
   id: string;
   name: string;
 }
 
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
   // Safe cast for extended user properties
@@ -101,7 +104,10 @@ export default function AdminDashboard() {
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [reports, setReports] = useState<AnnualReport[]>([]);
   const [events, setEvents] = useState<EventItem[]>([]);
+<<<<<<< HEAD
+=======
   const [teams, setTeams] = useState<Team[]>([]);
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
   // Delete Confirmation State
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
@@ -141,7 +147,10 @@ export default function AdminDashboard() {
     status: 'DRAFT',
     featuredImage: '',
     orientation: 'LANDSCAPE',
+<<<<<<< HEAD
+=======
     teamId: '',
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   });
 
   const [heroFormData, setHeroFormData] = useState({
@@ -203,7 +212,10 @@ export default function AdminDashboard() {
     if (session) {
       if (activeTab === 'blog') {
         fetchPosts();
+<<<<<<< HEAD
+=======
         fetchTeams();
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
       } else if (activeTab === 'users' && (session.user as any).role === 'SUPER_ADMIN') {
         fetchUsers();
       } else if (activeTab === 'hero') {
@@ -356,6 +368,8 @@ export default function AdminDashboard() {
     }
   };
 
+<<<<<<< HEAD
+=======
   const fetchTeams = async () => {
     try {
       const response = await fetch('/api/teams');
@@ -367,6 +381,7 @@ export default function AdminDashboard() {
     }
   };
 
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   const handleCreate = () => {
     setEditingPost(null);
     setFormData({
@@ -377,7 +392,10 @@ export default function AdminDashboard() {
       status: 'DRAFT',
       featuredImage: '',
       orientation: 'LANDSCAPE',
+<<<<<<< HEAD
+=======
       teamId: '',
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
     });
     setShowModal(true);
   };
@@ -407,6 +425,10 @@ export default function AdminDashboard() {
           status: data.status,
           featuredImage: data.featuredImage || '',
           orientation: data.orientation || 'LANDSCAPE',
+<<<<<<< HEAD
+        });
+        setShowModal(true);
+=======
           teamId: data.teamId || '',
         });
         setShowModal(true);
@@ -414,6 +436,7 @@ export default function AdminDashboard() {
       .catch((err) => {
         console.error('Error fetching post:', err);
         toast.error('Failed to load post');
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
       });
   };
 
@@ -744,11 +767,14 @@ export default function AdminDashboard() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+<<<<<<< HEAD
+=======
     if (!formData.teamId) {
       toast.error('Please select a team');
       return;
     }
 
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
     const loadingToast = toast.loading(editingPost ? 'Updating post...' : 'Creating post...');
 
     try {
@@ -773,7 +799,10 @@ export default function AdminDashboard() {
           status: 'DRAFT',
           featuredImage: '',
           orientation: 'LANDSCAPE',
+<<<<<<< HEAD
+=======
           teamId: '',
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
         });
       } else {
         const error = await response.json();
@@ -1846,6 +1875,231 @@ export default function AdminDashboard() {
               </div>
             </>
           )}
+<<<<<<< HEAD
+
+          {activeTab === 'developers' && <DeveloperManagement />}
+
+        </div>
+      </main >
+
+      {/* Modal for Create/Edit */}
+      {
+        showModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+            <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-[#101018] dark:text-white">
+                  {editingPost ? 'Edit Post' : 'Create New Post'}
+                </h3>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Title *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Excerpt
+                  </label>
+                  <textarea
+                    value={formData.excerpt}
+                    onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                    rows={2}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Content *
+                  </label>
+                  <textarea
+                    required
+                    value={formData.content}
+                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                    rows={10}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                      Category *
+                    </label>
+                    <select
+                      required
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                    >
+                      <option value="">Select category</option>
+                      <option value="Diplomacy">Diplomacy</option>
+                      <option value="SDG">SDG Goals</option>
+                      <option value="Youth & Education">Youth & Education</option>
+                      <option value="Climate Action">Climate Action</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                      Status
+                    </label>
+                    <select
+                      value={formData.status}
+                      onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                      className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                    >
+                      <option value="DRAFT">Draft</option>
+                      <option value="PUBLISHED">Published</option>
+                      <option value="ARCHIVED">Archived</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Orientation
+                  </label>
+                  <select
+                    value={(formData as any).orientation}
+                    onChange={(e) => setFormData({ ...formData, orientation: e.target.value } as any)}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  >
+                    <option value="LANDSCAPE">Landscape (Standard)</option>
+                    <option value="PORTRAIT">Portrait (Tall)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Featured Image
+                  </label>
+                  <ImageUpload
+                    value={formData.featuredImage}
+                    onChange={(url) => setFormData({ ...formData, featuredImage: url })}
+                    orientation={(formData as any).orientation || 'LANDSCAPE'}
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                    className="px-4 py-2 text-sm font-semibold text-[#5e5f8d] dark:text-gray-400 hover:bg-[#f0f0f5] dark:hover:bg-white/5 rounded-lg transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors"
+                  >
+                    {editingPost ? 'Update Post' : 'Create Post'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )
+      }
+
+      {showCreateUserModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+          <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-[#101018] dark:text-white">
+                Create User
+              </h3>
+              <button
+                onClick={() => setShowCreateUserModal(false)}
+                className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateUser} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Full name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={createUserFormData.fullName}
+                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, fullName: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={createUserFormData.email}
+                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, email: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Password *
+                </label>
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  value={createUserFormData.password}
+                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, password: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+                <p className="text-xs text-[#5e5f8d] dark:text-gray-400 mt-1">
+                  Minimum 6 characters.
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Role
+                </label>
+                <select
+                  value={createUserFormData.role}
+                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, role: e.target.value as any })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="SUPER_ADMIN">SUPER_ADMIN</option>
+                  <option value="ADMIN">ADMIN</option>
+                  <option value="MEMBER">MEMBER</option>
+                  <option value="GUEST">GUEST</option>
+                </select>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateUserModal(false)}
+                  className="inline-flex h-10 items-center justify-center rounded-lg border border-[#dadae7] dark:border-gray-700 bg-white dark:bg-transparent px-5 text-sm font-semibold text-[#101018] dark:text-white hover:bg-[#f5f5f8] dark:hover:bg-white/5 transition-colors"
+=======
         </div>
       </main>
 
@@ -1972,20 +2226,611 @@ export default function AdminDashboard() {
                   type="button"
                   onClick={() => setShowModal(false)}
                   className="inline-flex h-10 items-center justify-center rounded-lg border border-black/10 dark:border-white/10 px-5 text-sm font-semibold text-[#101018] dark:text-white hover:bg-black/5 dark:hover:bg-white/10"
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
+<<<<<<< HEAD
+                  className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors"
+                >
+                  Create
+=======
                   className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90"
                 >
                   {editingPost ? 'Save Changes' : 'Create Post'}
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+<<<<<<< HEAD
+
+      {showGalleryModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+          <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-[#101018] dark:text-white">
+                {editingGalleryImage ? 'Edit Image' : 'Add Image'}
+              </h3>
+              <button
+                onClick={() => setShowGalleryModal(false)}
+                className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleGallerySubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Image *
+                </label>
+                <ImageUpload
+                  value={galleryFormData.url}
+                  onChange={(url) => setGalleryFormData({ ...galleryFormData, url })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Caption
+                </label>
+                <input
+                  type="text"
+                  value={galleryFormData.caption}
+                  onChange={(e) => setGalleryFormData({ ...galleryFormData, caption: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Category
+                </label>
+                <select
+                  value={galleryFormData.category}
+                  onChange={(e) => setGalleryFormData({ ...galleryFormData, category: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="">Select category…</option>
+                  <option value="Event">Event</option>
+                  <option value="Workshop">Workshop</option>
+                  <option value="Conference">Conference</option>
+                  <option value="MUN">MUN</option>
+                  <option value="SDG">SDG</option>
+                  <option value="Outreach">Outreach</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Event / Posted Date
+                </label>
+                <input
+                  type="date"
+                  value={galleryFormData.eventDate}
+                  onChange={(e) => setGalleryFormData({ ...galleryFormData, eventDate: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+                <p className="text-xs text-[#5e5f8d] dark:text-gray-400 mt-1">
+                  Optional. If empty, the system uses the upload date.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Width
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={galleryFormData.width}
+                    onChange={(e) => setGalleryFormData({ ...galleryFormData, width: Number(e.target.value) })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Height
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={galleryFormData.height}
+                    onChange={(e) => setGalleryFormData({ ...galleryFormData, height: Number(e.target.value) })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowGalleryModal(false)}
+                  className="px-4 py-2 text-sm font-semibold text-[#5e5f8d] dark:text-gray-400 hover:bg-[#f0f0f5] dark:hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!galleryFormData.url}
+                  className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {editingGalleryImage ? 'Update Image' : 'Add Image'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showReportModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+          <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-[#101018] dark:text-white">
+                {editingReport ? 'Edit Report' : 'Add Report'}
+              </h3>
+              <button
+                onClick={() => setShowReportModal(false)}
+                className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleReportSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Title *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={reportFormData.title}
+                  onChange={(e) => setReportFormData({ ...reportFormData, title: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Year
+                  </label>
+                  <input
+                    type="number"
+                    min={1900}
+                    max={3000}
+                    value={reportFormData.year}
+                    onChange={(e) => setReportFormData({ ...reportFormData, year: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Published Date
+                  </label>
+                  <input
+                    type="date"
+                    value={reportFormData.publishedAt}
+                    onChange={(e) => setReportFormData({ ...reportFormData, publishedAt: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  PDF *
+                </label>
+                <PdfUpload
+                  value={reportFormData.fileUrl}
+                  onChange={(url) => setReportFormData({ ...reportFormData, fileUrl: url })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Description
+                </label>
+                <textarea
+                  rows={4}
+                  value={reportFormData.description}
+                  onChange={(e) => setReportFormData({ ...reportFormData, description: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowReportModal(false)}
+                  className="px-4 py-2 text-sm font-semibold text-[#5e5f8d] dark:text-gray-400 hover:bg-[#f0f0f5] dark:hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!reportFormData.title || !reportFormData.fileUrl}
+                  className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {editingReport ? 'Update Report' : 'Add Report'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showEventModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+          <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-[#101018] dark:text-white">
+                {editingEvent ? 'Edit Event' : 'Add Event'}
+              </h3>
+              <button
+                onClick={() => setShowEventModal(false)}
+                className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleEventSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Title *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={eventFormData.title}
+                  onChange={(e) => setEventFormData({ ...eventFormData, title: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Date & Time *
+                  </label>
+                  <input
+                    type="datetime-local"
+                    required
+                    value={eventFormData.date}
+                    onChange={(e) => setEventFormData({ ...eventFormData, date: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    value={eventFormData.location}
+                    onChange={(e) => setEventFormData({ ...eventFormData, location: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Status
+                  </label>
+                  <select
+                    value={eventFormData.status}
+                    onChange={(e) => setEventFormData({ ...eventFormData, status: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  >
+                    <option value="UPCOMING">UPCOMING</option>
+                    <option value="ONGOING">ONGOING</option>
+                    <option value="COMPLETED">COMPLETED</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Image
+                  </label>
+                  <ImageUpload
+                    value={eventFormData.image}
+                    onChange={(url) => setEventFormData({ ...eventFormData, image: url })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                  Description *
+                </label>
+                <textarea
+                  required
+                  rows={5}
+                  value={eventFormData.description}
+                  onChange={(e) => setEventFormData({ ...eventFormData, description: e.target.value })}
+                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowEventModal(false)}
+                  className="px-4 py-2 text-sm font-semibold text-[#5e5f8d] dark:text-gray-400 hover:bg-[#f0f0f5] dark:hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!eventFormData.title || !eventFormData.date || !eventFormData.description}
+                  className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {editingEvent ? 'Update Event' : 'Add Event'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for Hero Announcements */}
+      {
+        showHeroModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+            <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-[#101018] dark:text-white">
+                  {editingHeroPost ? 'Edit Announcement' : 'Create Announcement'}
+                </h3>
+                <button
+                  onClick={() => setShowHeroModal(false)}
+                  className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+
+              <form onSubmit={handleHeroSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Title *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={heroFormData.title}
+                    onChange={(e) => setHeroFormData({ ...heroFormData, title: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Content
+                  </label>
+                  <textarea
+                    value={heroFormData.content}
+                    onChange={(e) => setHeroFormData({ ...heroFormData, content: e.target.value })}
+                    rows={4}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Orientation
+                  </label>
+                  <select
+                    value={(heroFormData as any).orientation}
+                    onChange={(e) => setHeroFormData({ ...heroFormData, orientation: e.target.value } as any)}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  >
+                    <option value="LANDSCAPE">Landscape (Standard)</option>
+                    <option value="PORTRAIT">Portrait (Tall)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Announcement Image
+                  </label>
+                  <ImageUpload
+                    value={heroFormData.image}
+                    onChange={(url) => setHeroFormData({ ...heroFormData, image: url })}
+                    orientation={(heroFormData as any).orientation || 'LANDSCAPE'}
+                  />
+                </div>
+
+                <div>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={heroFormData.isActive}
+                      onChange={(e) => setHeroFormData({ ...heroFormData, isActive: e.target.checked })}
+                      className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
+                    />
+                    <span className="text-sm font-medium text-[#101018] dark:text-white">
+                      Active (Visible on homepage)
+                    </span>
+                  </label>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowHeroModal(false)}
+                    className="px-4 py-2 text-sm font-semibold text-[#5e5f8d] dark:text-gray-400 hover:bg-[#f0f0f5] dark:hover:bg-white/5 rounded-lg transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors"
+                  >
+                    {editingHeroPost ? 'Update' : 'Create'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )
+      }
+      {/* Modal for Magazine */}
+      {
+        showMagazineModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+            <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-[#101018] dark:text-white">
+                  {editingMagazine ? 'Edit Magazine' : 'Add New Magazine'}
+                </h3>
+                <button
+                  onClick={() => setShowMagazineModal(false)}
+                  className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+
+              <form onSubmit={handleMagazineSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Title *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={magazineFormData.title}
+                    onChange={(e) => setMagazineFormData({ ...magazineFormData, title: e.target.value })}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Description
+                  </label>
+                  <textarea
+                    value={magazineFormData.description}
+                    onChange={(e) => setMagazineFormData({ ...magazineFormData, description: e.target.value })}
+                    rows={3}
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Embed Code *
+                  </label>
+                  <div className="mb-2 text-xs text-[#5e5f8d] dark:text-gray-400">
+                    Paste the full iframe embed code provided by the flipbook service.
+                  </div>
+                  <textarea
+                    required
+                    value={magazineFormData.embedCode}
+                    onChange={(e) => setMagazineFormData({ ...magazineFormData, embedCode: e.target.value })}
+                    rows={5}
+                    placeholder='<iframe ... ></iframe>'
+                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm font-mono text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    PDF Document (Optional)
+                  </label>
+                  <PdfUpload
+                    value={magazineFormData.pdfUrl}
+                    onChange={(url) => setMagazineFormData({ ...magazineFormData, pdfUrl: url })}
+                  />
+                  <p className="text-xs text-[#5e5f8d] dark:text-gray-400 mt-1">
+                    Upload a PDF version of the magazine for users to download or view directly.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
+                    Cover Image
+                  </label>
+                  <ImageUpload
+                    value={magazineFormData.coverImage}
+                    onChange={(url) => setMagazineFormData({ ...magazineFormData, coverImage: url })}
+                    orientation="PORTRAIT"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowMagazineModal(false)}
+                    className="px-4 py-2 text-sm font-semibold text-[#5e5f8d] dark:text-gray-400 hover:bg-[#f0f0f5] dark:hover:bg-white/5 rounded-lg transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors"
+                  >
+                    {editingMagazine ? 'Update Magazine' : 'Create Magazine'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )
+      }
+
+      {/* Delete Confirmation Modal */}
+      {
+        deleteConfirmation.isOpen && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[70] p-4">
+            <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-sm w-full p-6 shadow-xl border border-gray-100 dark:border-gray-800">
+              <h3 className="text-lg font-bold text-[#101018] dark:text-white mb-2">
+                Confirm Delete
+              </h3>
+              <p className="text-[#5e5f8d] dark:text-gray-400 text-sm mb-6">
+                Are you sure you want to delete this {deleteConfirmation.type}? This action cannot be undone.
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setDeleteConfirmation({ isOpen: false, type: null, id: null })}
+                  className="px-4 py-2 text-sm font-semibold text-[#5e5f8d] dark:text-gray-400 hover:bg-[#f0f0f5] dark:hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    if (deleteConfirmation.type === 'post') confirmDeletePost();
+                    else if (deleteConfirmation.type === 'hero') confirmDeleteHero();
+                    else if (deleteConfirmation.type === 'magazine') confirmDeleteMagazine();
+                    else if (deleteConfirmation.type === 'gallery') confirmDeleteGalleryImage();
+                    else if (deleteConfirmation.type === 'report') confirmDeleteReport();
+                    else if (deleteConfirmation.type === 'event') confirmDeleteEvent();
+                  }}
+                  className="px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      }
+
+    </div >
+=======
     </div>
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   );
 }

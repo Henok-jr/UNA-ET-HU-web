@@ -8,7 +8,10 @@ import toast from 'react-hot-toast';
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+<<<<<<< HEAD
+=======
   const currentYear = new Date().getFullYear();
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
   const onSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -150,7 +153,11 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+<<<<<<< HEAD
+          <p>© 2024 United Nations Association Ethiopia - HU Chapter. All rights reserved.</p>
+=======
           <p>© {currentYear} United Nations Association Ethiopia - HU Chapter. All rights reserved.</p>
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
           <div className="flex flex-wrap items-center justify-end gap-4">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
