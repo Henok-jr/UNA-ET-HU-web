@@ -11,13 +11,10 @@ export default function SignUpPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: '',
-<<<<<<< HEAD
     phoneNumber: '',
     year: '',
     department: '',
     team: '',
-=======
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
     email: '',
     password: '',
     confirmPassword: '',
@@ -48,10 +45,6 @@ export default function SignUpPage() {
     const loadingToast = toast.loading('Creating your account...');
 
     try {
-<<<<<<< HEAD
-=======
-      // Create account
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -59,13 +52,10 @@ export default function SignUpPage() {
           email: formData.email,
           password: formData.password,
           fullName: formData.fullName,
-<<<<<<< HEAD
           phoneNumber: formData.phoneNumber,
           year: formData.year,
           department: formData.department,
           team: formData.team,
-=======
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
         }),
       });
 
@@ -78,7 +68,6 @@ export default function SignUpPage() {
       }
 
       toast.success('Account created successfully!', { id: loadingToast });
-<<<<<<< HEAD
       console.log('Signup successful');
 
       try {
@@ -177,10 +166,7 @@ export default function SignUpPage() {
         }
       }
 
-=======
-
       // Auto sign in after successful signup
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
       const signInToast = toast.loading('Signing you in...');
       const result = await signIn('credentials', {
         email: formData.email,
@@ -215,10 +201,6 @@ export default function SignUpPage() {
       <Navigation />
       <div className="flex-1 flex flex-col items-center justify-center p-6">
         <div className="flex flex-col items-center w-full max-w-[460px] mx-auto py-12">
-<<<<<<< HEAD
-=======
-          {/* Branding Header */}
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
           <div className="flex items-center gap-3 mb-10">
             <div className="size-10 bg-primary rounded-lg flex items-center justify-center text-white">
               <svg
@@ -238,10 +220,6 @@ export default function SignUpPage() {
             </h2>
           </div>
 
-<<<<<<< HEAD
-=======
-          {/* Central Auth Card (Sign Up) */}
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
           <div className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1a1d23] w-full rounded-xl p-8 shadow-sm">
             <div className="mb-8 text-center lg:text-left">
               <h1 className="text-[#101618] dark:text-white text-2xl font-bold leading-tight mb-2">
@@ -252,19 +230,11 @@ export default function SignUpPage() {
               </p>
             </div>
 
-<<<<<<< HEAD
-=======
-            {/* Google Sign In Button */}
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
             <button
               type="button"
               onClick={handleGoogleSignIn}
               disabled={googleLoading || loading}
-<<<<<<< HEAD
               className="w-full mb-4 flex items-center justify-center gap-3 bg-white dark:bg-[#2d333b] border border-gray-200 dark:border-gray-700 text-[#101618] dark:text-white rounded-lg h-12 font-semibold transition-colors hover:bg-gray-50 dark:hover:bg-[#3d4149] disabled:opacity-50 disabled:cursor-not-allowed"
-=======
-              className="w-full mb-4 flex items-center justify-center gap-3 bg-white dark:bg-[#2d3139] border border-gray-200 dark:border-gray-700 text-[#101618] dark:text-white rounded-lg h-12 font-semibold transition-colors hover:bg-gray-50 dark:hover:bg-[#3d4149] disabled:opacity-50 disabled:cursor-not-allowed"
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
             >
               {googleLoading ? (
                 <>
@@ -319,7 +289,6 @@ export default function SignUpPage() {
                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                   placeholder="John Doe"
                   disabled={loading || googleLoading}
-<<<<<<< HEAD
                   className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
                 />
               </div>
@@ -390,12 +359,6 @@ export default function SignUpPage() {
                 </select>
               </div>
 
-=======
-                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d3139] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
-                />
-              </div>
-
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
               <div className="flex flex-col gap-1.5">
                 <label className="text-[#101618] dark:text-gray-200 text-sm font-semibold">
                   Email Address *
@@ -407,11 +370,7 @@ export default function SignUpPage() {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="your.email@example.com"
                   disabled={loading || googleLoading}
-<<<<<<< HEAD
                   className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
-=======
-                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d3139] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                 />
               </div>
 
@@ -424,13 +383,9 @@ export default function SignUpPage() {
                   required
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  placeholder="••••••••"
+                  placeholder="Create a password"
                   disabled={loading || googleLoading}
-<<<<<<< HEAD
-                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none disabled:opacity-50"
-=======
-                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d3139] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none disabled:opacity-50"
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
+                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
                 />
               </div>
 
@@ -443,75 +398,38 @@ export default function SignUpPage() {
                   required
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                  placeholder="••••••••"
+                  placeholder="Confirm your password"
                   disabled={loading || googleLoading}
-<<<<<<< HEAD
-                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none disabled:opacity-50"
-=======
-                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d3139] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none disabled:opacity-50"
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
+                  className="w-full rounded-lg border-gray-200 dark:border-gray-700 bg-[#f4f6f8] dark:bg-[#2d333b] text-[#101618] dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary h-11 px-4 transition-all outline-none placeholder:text-gray-400 disabled:opacity-50"
                 />
               </div>
 
-              <div className="flex items-start gap-2 py-2">
+              <div className="flex items-center gap-2">
                 <input
-                  id="terms"
+                  id="agree"
                   type="checkbox"
                   checked={agreeToTerms}
                   onChange={(e) => setAgreeToTerms(e.target.checked)}
                   disabled={loading || googleLoading}
-                  className="mt-1 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer size-4 disabled:opacity-50"
                 />
-                <label
-                  htmlFor="terms"
-                  className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed cursor-pointer"
-                >
-                  I agree to the{' '}
-                  <a href="#" className="text-primary font-semibold hover:underline">
-                    Terms of Service
-                  </a>{' '}
-                  and{' '}
-                  <a href="#" className="text-primary font-semibold hover:underline">
-                    Privacy Policy
-                  </a>
-                  .
+                <label htmlFor="agree" className="text-sm text-gray-600 dark:text-gray-300">
+                  I agree to the <Link href="/privacy">Privacy Policy</Link> and <Link href="/terms">Terms of Service</Link>
                 </label>
               </div>
 
               <button
                 type="submit"
                 disabled={loading || googleLoading}
-                className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg h-12 font-bold tracking-wide transition-colors shadow-md shadow-primary/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full bg-primary text-white rounded-lg py-3 font-semibold disabled:opacity-50"
               >
-                {loading ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Creating Account...
-                  </>
-                ) : (
-                  'Create Account'
-                )}
+                {loading ? 'Creating account...' : 'Create account'}
               </button>
-            </form>
 
-            <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800 text-center">
-              <p className="text-gray-500 dark:text-gray-400 text-sm">
-                Already have an account?{' '}
-                <Link href="/auth/signin" className="text-primary font-bold hover:underline ml-1">
-                  Sign In
-                </Link>
+              <p className="text-sm text-center text-gray-500">
+                Already have an account? <Link href="/auth/signin" className="text-primary">Sign in</Link>
               </p>
-            </div>
+            </form>
           </div>
-        </div>
-
-<<<<<<< HEAD
-=======
-        {/* Background Decoration */}
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
-        <div className="fixed top-0 left-0 w-full h-full -z-10 opacity-[0.03] pointer-events-none select-none overflow-hidden">
-          <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary rounded-full blur-[120px]"></div>
-          <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-primary rounded-full blur-[120px]"></div>
         </div>
       </div>
     </div>

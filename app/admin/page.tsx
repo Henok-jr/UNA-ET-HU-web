@@ -84,14 +84,11 @@ interface User {
   };
 }
 
-<<<<<<< HEAD
-=======
 interface Team {
   id: string;
   name: string;
 }
 
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
   // Safe cast for extended user properties
@@ -104,10 +101,7 @@ export default function AdminDashboard() {
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [reports, setReports] = useState<AnnualReport[]>([]);
   const [events, setEvents] = useState<EventItem[]>([]);
-<<<<<<< HEAD
-=======
   const [teams, setTeams] = useState<Team[]>([]);
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
   // Delete Confirmation State
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
@@ -147,10 +141,7 @@ export default function AdminDashboard() {
     status: 'DRAFT',
     featuredImage: '',
     orientation: 'LANDSCAPE',
-<<<<<<< HEAD
-=======
     teamId: '',
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   });
 
   const [heroFormData, setHeroFormData] = useState({
@@ -212,10 +203,7 @@ export default function AdminDashboard() {
     if (session) {
       if (activeTab === 'blog') {
         fetchPosts();
-<<<<<<< HEAD
-=======
         fetchTeams();
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
       } else if (activeTab === 'users' && (session.user as any).role === 'SUPER_ADMIN') {
         fetchUsers();
       } else if (activeTab === 'hero') {
@@ -368,8 +356,6 @@ export default function AdminDashboard() {
     }
   };
 
-<<<<<<< HEAD
-=======
   const fetchTeams = async () => {
     try {
       const response = await fetch('/api/teams');
@@ -381,7 +367,6 @@ export default function AdminDashboard() {
     }
   };
 
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   const handleCreate = () => {
     setEditingPost(null);
     setFormData({
@@ -392,10 +377,7 @@ export default function AdminDashboard() {
       status: 'DRAFT',
       featuredImage: '',
       orientation: 'LANDSCAPE',
-<<<<<<< HEAD
-=======
       teamId: '',
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
     });
     setShowModal(true);
   };
@@ -425,10 +407,6 @@ export default function AdminDashboard() {
           status: data.status,
           featuredImage: data.featuredImage || '',
           orientation: data.orientation || 'LANDSCAPE',
-<<<<<<< HEAD
-        });
-        setShowModal(true);
-=======
           teamId: data.teamId || '',
         });
         setShowModal(true);
@@ -436,7 +414,6 @@ export default function AdminDashboard() {
       .catch((err) => {
         console.error('Error fetching post:', err);
         toast.error('Failed to load post');
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
       });
   };
 
@@ -767,14 +744,11 @@ export default function AdminDashboard() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-<<<<<<< HEAD
-=======
     if (!formData.teamId) {
       toast.error('Please select a team');
       return;
     }
 
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
     const loadingToast = toast.loading(editingPost ? 'Updating post...' : 'Creating post...');
 
     try {
@@ -799,10 +773,7 @@ export default function AdminDashboard() {
           status: 'DRAFT',
           featuredImage: '',
           orientation: 'LANDSCAPE',
-<<<<<<< HEAD
-=======
           teamId: '',
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
         });
       } else {
         const error = await response.json();
@@ -1875,231 +1846,9 @@ export default function AdminDashboard() {
               </div>
             </>
           )}
-<<<<<<< HEAD
 
           {activeTab === 'developers' && <DeveloperManagement />}
 
-        </div>
-      </main >
-
-      {/* Modal for Create/Edit */}
-      {
-        showModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
-            <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-[#101018] dark:text-white">
-                  {editingPost ? 'Edit Post' : 'Create New Post'}
-                </h3>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
-                >
-                  <span className="material-symbols-outlined">close</span>
-                </button>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                    Title *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                    Excerpt
-                  </label>
-                  <textarea
-                    value={formData.excerpt}
-                    onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                    rows={2}
-                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                    Content *
-                  </label>
-                  <textarea
-                    required
-                    value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    rows={10}
-                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                      Category *
-                    </label>
-                    <select
-                      required
-                      value={formData.category}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                    >
-                      <option value="">Select category</option>
-                      <option value="Diplomacy">Diplomacy</option>
-                      <option value="SDG">SDG Goals</option>
-                      <option value="Youth & Education">Youth & Education</option>
-                      <option value="Climate Action">Climate Action</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                      Status
-                    </label>
-                    <select
-                      value={formData.status}
-                      onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                      className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                    >
-                      <option value="DRAFT">Draft</option>
-                      <option value="PUBLISHED">Published</option>
-                      <option value="ARCHIVED">Archived</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                    Orientation
-                  </label>
-                  <select
-                    value={(formData as any).orientation}
-                    onChange={(e) => setFormData({ ...formData, orientation: e.target.value } as any)}
-                    className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  >
-                    <option value="LANDSCAPE">Landscape (Standard)</option>
-                    <option value="PORTRAIT">Portrait (Tall)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                    Featured Image
-                  </label>
-                  <ImageUpload
-                    value={formData.featuredImage}
-                    onChange={(url) => setFormData({ ...formData, featuredImage: url })}
-                    orientation={(formData as any).orientation || 'LANDSCAPE'}
-                  />
-                </div>
-
-                <div className="flex justify-end gap-3 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className="px-4 py-2 text-sm font-semibold text-[#5e5f8d] dark:text-gray-400 hover:bg-[#f0f0f5] dark:hover:bg-white/5 rounded-lg transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 text-sm font-semibold text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors"
-                  >
-                    {editingPost ? 'Update Post' : 'Create Post'}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )
-      }
-
-      {showCreateUserModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
-          <div className="bg-white dark:bg-[#1a1a2e] rounded-xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-[#101018] dark:text-white">
-                Create User
-              </h3>
-              <button
-                onClick={() => setShowCreateUserModal(false)}
-                className="text-[#5e5f8d] dark:text-gray-400 hover:text-[#101018] dark:hover:text-white"
-              >
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateUser} className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                  Full name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={createUserFormData.fullName}
-                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, fullName: e.target.value })}
-                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={createUserFormData.email}
-                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, email: e.target.value })}
-                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                  Password *
-                </label>
-                <input
-                  type="password"
-                  required
-                  minLength={6}
-                  value={createUserFormData.password}
-                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, password: e.target.value })}
-                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <p className="text-xs text-[#5e5f8d] dark:text-gray-400 mt-1">
-                  Minimum 6 characters.
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-[#101018] dark:text-white">
-                  Role
-                </label>
-                <select
-                  value={createUserFormData.role}
-                  onChange={(e) => setCreateUserFormData({ ...createUserFormData, role: e.target.value as any })}
-                  className="w-full rounded-lg border border-[#dadae7] dark:border-gray-700 bg-[#f5f5f8] dark:bg-black/20 px-4 py-2 text-sm text-[#101018] dark:text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                >
-                  <option value="SUPER_ADMIN">SUPER_ADMIN</option>
-                  <option value="ADMIN">ADMIN</option>
-                  <option value="MEMBER">MEMBER</option>
-                  <option value="GUEST">GUEST</option>
-                </select>
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateUserModal(false)}
-                  className="inline-flex h-10 items-center justify-center rounded-lg border border-[#dadae7] dark:border-gray-700 bg-white dark:bg-transparent px-5 text-sm font-semibold text-[#101018] dark:text-white hover:bg-[#f5f5f8] dark:hover:bg-white/5 transition-colors"
-=======
         </div>
       </main>
 
@@ -2194,12 +1943,10 @@ export default function AdminDashboard() {
                 <label className="block text-sm font-semibold text-[#101018] dark:text-white mb-1">
                   Featured Image
                 </label>
-                <div className="mb-4">
-                  <ImageUpload
-                    value={formData.featuredImage}
-                    onChange={(url) => setFormData({ ...formData, featuredImage: url })}
-                  />
-                </div>
+                <ImageUpload
+                  value={formData.featuredImage}
+                  onChange={(url) => setFormData({ ...formData, featuredImage: url })}
+                />
               </div>
 
               <div>
@@ -2226,28 +1973,20 @@ export default function AdminDashboard() {
                   type="button"
                   onClick={() => setShowModal(false)}
                   className="inline-flex h-10 items-center justify-center rounded-lg border border-black/10 dark:border-white/10 px-5 text-sm font-semibold text-[#101018] dark:text-white hover:bg-black/5 dark:hover:bg-white/10"
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-<<<<<<< HEAD
-                  className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors"
-                >
-                  Create
-=======
                   className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-white shadow-sm hover:bg-primary/90"
                 >
                   {editingPost ? 'Save Changes' : 'Create Post'}
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-<<<<<<< HEAD
 
       {showGalleryModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
@@ -2829,8 +2568,5 @@ export default function AdminDashboard() {
       }
 
     </div >
-=======
-    </div>
->>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   );
 }
