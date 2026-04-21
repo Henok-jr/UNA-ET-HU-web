@@ -2,6 +2,10 @@ import Image from "next/image";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import EventFlipCard from "../components/innovation/EventFlipCard";
+<<<<<<< HEAD
+=======
+import Link from "next/link";
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
 const heroBackdrop =
   "linear-gradient(120deg, rgba(6,10,18,0.90) 0%, rgba(8,17,31,0.82) 42%, rgba(8,17,31,0.92) 100%), url(https://images.unsplash.com/photo-1573164574572-cb89e39749b4?auto=format&fit=crop&w=2200&q=80)";
@@ -151,6 +155,18 @@ export default function DebatePage() {
               trains clarity, discipline, and diplomatic confidence.
             </p>
 
+<<<<<<< HEAD
+=======
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link
+                href="/auth/signup"
+                className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-[0_0_24px_rgba(0,163,255,0.35)] transition hover:bg-primary/90"
+              >
+                Join Debate Team
+              </Link>
+            </div>
+
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
             <div className="mt-10 grid gap-4 md:grid-cols-3">
               <article className="rounded-2xl border border-white/15 bg-[#0d1b2c]/75 p-5 backdrop-blur-sm">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
@@ -217,6 +233,7 @@ export default function DebatePage() {
             </div>
           </div>
         </section>
+<<<<<<< HEAD
 
         <section id="registration" className="border-t border-white/10 bg-[#08111f] py-16 sm:py-20">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -244,6 +261,8 @@ export default function DebatePage() {
             </div>
           </div>
         </section>
+=======
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
       </main>
       <Footer />
     </>

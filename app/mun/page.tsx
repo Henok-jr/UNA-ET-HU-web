@@ -45,8 +45,13 @@ function MUNHero() {
           collaborative problem-solving, and international cooperation.
         </p>
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+<<<<<<< HEAD
           <Button size="lg" className="font-bold shadow-xl shadow-primary/20">
             Register for Next MUN
+=======
+          <Button asChild size="lg" className="font-bold shadow-xl shadow-primary/20">
+            <Link href="/auth/signup">Register for Next MUN</Link>
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
           </Button>
           <Button
             size="lg"

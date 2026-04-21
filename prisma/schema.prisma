@@ -1,15 +1,24 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
+<<<<<<< HEAD
   provider = "postgresql"
   url      = env("DATABASE_URL")
+=======
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   directUrl = env("DIRECT_URL")
 }
 
 model User {
+<<<<<<< HEAD
   id            String    @id @default(cuid())
   fullName      String    @map("full_name")
   email         String    @unique
@@ -22,6 +31,20 @@ model User {
   blogPosts     BlogPost[]
   comments      Comment[]
   likes         Like[]
+=======
+  id        String   @id @default(cuid())
+  fullName  String   @map("full_name")
+  email     String   @unique
+  password  String?
+  role      Role     @default(MEMBER)
+  avatar    String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  blogPosts BlogPost[]
+  comments  Comment[]
+  likes     Like[]
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
   @@map("users")
 }
@@ -44,15 +67,29 @@ model BlogPost {
   orientation   String     @default("LANDSCAPE") // "LANDSCAPE" or "PORTRAIT"
   status        PostStatus @default(DRAFT)
   authorId      String     @map("author_id")
+<<<<<<< HEAD
+=======
+  teamId        String?    @map("team_id")
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   publishedAt   DateTime?  @map("published_at")
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
 
+<<<<<<< HEAD
   author        User       @relation(fields: [authorId], references: [id])
   comments      Comment[]
   likes         Like[]
   tags          Tag[]
 
+=======
+  author   User      @relation(fields: [authorId], references: [id])
+  team     Team?     @relation(fields: [teamId], references: [id], onDelete: Restrict)
+  comments Comment[]
+  likes    Like[]
+  tags     Tag[]
+
+  @@index([teamId])
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   @@map("blog_posts")
 }
 
@@ -63,6 +100,7 @@ enum PostStatus {
 }
 
 model Comment {
+<<<<<<< HEAD
   id        String    @id @default(cuid())
   content   String    @db.Text
   postId    String    @map("post_id")
@@ -76,6 +114,21 @@ model Comment {
   parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies   Comment[] @relation("CommentReplies")
   likes     Like[]
+=======
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  postId    String   @map("post_id")
+  authorId  String   @map("author_id")
+  parentId  String?  @map("parent_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  post    BlogPost  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author  User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[] @relation("CommentReplies")
+  likes   Like[]
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
   @@map("comments")
 }
@@ -87,9 +140,15 @@ model Like {
   userId    String   @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
 
+<<<<<<< HEAD
   post      BlogPost? @relation(fields: [postId], references: [id], onDelete: Cascade)
   comment   Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+=======
+  post    BlogPost? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
   @@unique([postId, userId])
   @@unique([commentId, userId])
@@ -97,9 +156,15 @@ model Like {
 }
 
 model Tag {
+<<<<<<< HEAD
   id        String     @id @default(cuid())
   name      String     @unique
   posts     BlogPost[]
+=======
+  id    String     @id @default(cuid())
+  name  String     @unique
+  posts BlogPost[]
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
   @@map("tags")
 }
@@ -111,6 +176,10 @@ model Team {
   description String?      @db.Text
   image       String?
   members     TeamMember[]
+<<<<<<< HEAD
+=======
+  blogPosts   BlogPost[]
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   createdAt   DateTime     @default(now()) @map("created_at")
   updatedAt   DateTime     @updatedAt @map("updated_at")
 
@@ -128,7 +197,11 @@ model TeamMember {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+<<<<<<< HEAD
   team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+=======
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
   @@map("team_members")
 }
@@ -140,6 +213,10 @@ model Conference {
   date        DateTime
   location    String?
   image       String?
+<<<<<<< HEAD
+=======
+  team        String?  @map("team")
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   status      String   @default("UPCOMING") // UPCOMING, ONGOING, COMPLETED
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
@@ -160,6 +237,7 @@ model Project {
 }
 
 model GalleryImage {
+<<<<<<< HEAD
   id          String   @id @default(cuid())
   url         String
   caption     String?
@@ -169,6 +247,17 @@ model GalleryImage {
   eventDate   DateTime? @map("event_date")
   createdAt   DateTime @default(now()) @map("created_at")
   
+=======
+  id        String    @id @default(cuid())
+  url       String
+  caption   String?
+  width     Int       @default(800)
+  height    Int       @default(600)
+  category  String? // e.g., "Event", "Workshop"
+  eventDate DateTime? @map("event_date")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   @@map("gallery_images")
 }
 
@@ -194,6 +283,7 @@ model NewsletterSubscriber {
 }
 
 model HeroPost {
+<<<<<<< HEAD
   id        String   @id @default(cuid())
   title     String
   content   String?  @db.Text
@@ -202,11 +292,22 @@ model HeroPost {
   isActive  Boolean  @default(true) @map("is_active")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+=======
+  id          String   @id @default(cuid())
+  title       String
+  content     String?  @db.Text
+  image       String?
+  orientation String   @default("LANDSCAPE") // "LANDSCAPE" or "PORTRAIT"
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
   @@map("hero_posts")
 }
 
 model Magazine {
+<<<<<<< HEAD
   id          String    @id @default(cuid())
   title       String
   description String?   @db.Text
@@ -216,6 +317,17 @@ model Magazine {
   publishedAt DateTime  @default(now()) @map("published_at")
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
+=======
+  id          String   @id @default(cuid())
+  title       String
+  description String?  @db.Text
+  coverImage  String?  @map("cover_image")
+  embedCode   String   @map("embed_code") @db.Text
+  pdfUrl      String?  @map("pdf_url")
+  publishedAt DateTime @default(now()) @map("published_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
   @@map("magazines")
 }
@@ -235,4 +347,8 @@ model Developer {
   updatedAt         DateTime @updatedAt @map("updated_at")
 
   @@map("developers")
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae

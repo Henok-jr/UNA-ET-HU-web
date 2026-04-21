@@ -13,7 +13,24 @@ export async function GET(
 
     const post = await prisma.blogPost.findUnique({
       where: { slug },
+<<<<<<< HEAD
       include: {
+=======
+      // IMPORTANT: do NOT read teamId yet; existing rows contain null team_id and the
+      // current Prisma runtime is erroring while converting that field.
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        content: true,
+        category: true,
+        featuredImage: true,
+        orientation: true,
+        status: true,
+        publishedAt: true,
+        createdAt: true,
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
         author: {
           select: {
             id: true,
@@ -23,6 +40,7 @@ export async function GET(
         },
         likes: true,
         comments: {
+<<<<<<< HEAD
           where: { parentId: null }, // Fetch top-level comments
           orderBy: { createdAt: 'desc' },
           include: {
@@ -34,6 +52,25 @@ export async function GET(
                 likes: true,
               },
               orderBy: { createdAt: 'asc' },
+=======
+          where: { parentId: null },
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            author: { select: { id: true, fullName: true, avatar: true } },
+            likes: true,
+            replies: {
+              orderBy: { createdAt: 'asc' },
+              select: {
+                id: true,
+                content: true,
+                createdAt: true,
+                author: { select: { id: true, fullName: true, avatar: true } },
+                likes: true,
+              },
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
             },
           },
         },

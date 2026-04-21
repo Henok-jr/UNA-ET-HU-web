@@ -6,6 +6,10 @@ import { PlayCircle, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
+<<<<<<< HEAD
+=======
+import Link from "next/link";
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
 const sdgHeadImage =
   "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&fit=crop&w=900&q=80";
@@ -45,8 +49,13 @@ function SDGHero() {
                     through the 17 Sustainable Development Goals.
                 </p>
                 <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+<<<<<<< HEAD
                     <Button size="lg" className="font-bold shadow-xl shadow-primary/20">
                         See Our Impact
+=======
+                    <Button asChild size="lg" className="font-bold shadow-xl shadow-primary/20">
+                        <Link href="/auth/signup">Join the SDG Team</Link>
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                     </Button>
                     <Button
                         size="lg"
@@ -437,6 +446,7 @@ function LeadAmbassadors() {
     );
 }
 
+<<<<<<< HEAD
 const initiatives = [
     {
         title: "Green Hiking at Mt. Tabor",
@@ -522,6 +532,8 @@ function ImpactInitiatives() {
     );
 }
 
+=======
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 function SDGCta() {
   return (
     <section className="py-20 bg-[#0a1118] border-t border-white/10">
@@ -564,7 +576,10 @@ export default function SDGPage() {
                 <SDGAboutTeam />
 
                 <SDGGrid />
+<<<<<<< HEAD
                 <ImpactInitiatives />
+=======
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                 <LeadAmbassadors />
                 <SDGCta />
             </main>

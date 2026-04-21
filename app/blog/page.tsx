@@ -36,11 +36,20 @@ function BlogContent() {
 
   const [postsData, setPostsData] = useState<PostsResponse | null>(null);
   const [loading, setLoading] = useState(true);
+<<<<<<< HEAD
   const [search, setSearch] = useState(searchParams.get('q') || '');
   const [category, setCategory] = useState(searchParams.get('category') || 'all');
   const [page, setPage] = useState(
     parseInt(searchParams.get('page') || '1', 10) || 1,
   );
+=======
+  const [showEmpty, setShowEmpty] = useState(false);
+
+  // Single source of truth: URL query params
+  const search = searchParams.get('q') || '';
+  const category = searchParams.get('category') || 'all';
+  const page = parseInt(searchParams.get('page') || '1', 10) || 1;
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
   // Available categories (could also be fetched dynamically)
   const categories = useMemo(
@@ -59,6 +68,10 @@ function BlogContent() {
 
     async function fetchPosts() {
       try {
+<<<<<<< HEAD
+=======
+        // Keep showing previous items while fetching new ones to avoid a misleading empty state flash
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
         setLoading(true);
         const params = new URLSearchParams();
         params.set('page', String(page));
@@ -74,6 +87,10 @@ function BlogContent() {
         }
         const data: PostsResponse = await res.json();
         setPostsData(data);
+<<<<<<< HEAD
+=======
+        setShowEmpty(data.total === 0);
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
       } catch (error) {
         if ((error as any).name !== 'AbortError') {
           console.error(error);
@@ -84,6 +101,7 @@ function BlogContent() {
     }
 
     fetchPosts();
+<<<<<<< HEAD
 
     // Sync URL query
     const qp = new URLSearchParams();
@@ -99,11 +117,37 @@ function BlogContent() {
   const handleCategoryClick = (id: string) => {
     setCategory(id);
     setPage(1);
+=======
+    return () => controller.abort();
+  }, [search, category, page]);
+
+  const handleCategoryClick = (id: string) => {
+    const qp = new URLSearchParams(searchParams);
+    if (id && id !== 'all') qp.set('category', id);
+    else qp.delete('category');
+    qp.delete('page');
+    router.push(qp.toString() ? `/blog?${qp.toString()}` : '/blog');
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+<<<<<<< HEAD
     setPage(1);
+=======
+    const qp = new URLSearchParams(searchParams);
+    // search is controlled in the input via onChange below by updating URL
+    qp.delete('page');
+    router.push(qp.toString() ? `/blog?${qp.toString()}` : '/blog');
+  };
+
+  const handleSearchChange = (value: string) => {
+    const qp = new URLSearchParams(searchParams);
+    if (value) qp.set('q', value);
+    else qp.delete('q');
+    qp.delete('page');
+    router.push(qp.toString() ? `/blog?${qp.toString()}` : '/blog');
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
   };
 
   const totalPages = postsData?.totalPages ?? 1;
@@ -157,7 +201,11 @@ function BlogContent() {
                   type="text"
                   placeholder="Search articles, topics, keywords..."
                   value={search}
+<<<<<<< HEAD
                   onChange={(e) => setSearch(e.target.value)}
+=======
+                  onChange={(e) => handleSearchChange(e.target.value)}
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                   className="w-full pl-10 pr-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#111827] text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary/60"
                 />
               </div>
@@ -172,7 +220,11 @@ function BlogContent() {
           </div>
         )}
 
+<<<<<<< HEAD
         {!loading && items.length === 0 && (
+=======
+        {showEmpty && (
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
           <div className="py-16 text-center text-slate-500 dark:text-slate-400">
             <p className="text-lg font-semibold mb-2">No articles found</p>
             <p className="text-sm">
@@ -334,7 +386,17 @@ function BlogContent() {
                 </p>
                 <div className="flex items-center gap-2">
                   <button
+<<<<<<< HEAD
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
+=======
+                    onClick={() => {
+                      const qp = new URLSearchParams(searchParams);
+                      const next = Math.max(1, page - 1);
+                      if (next === 1) qp.delete('page');
+                      else qp.set('page', String(next));
+                      router.push(qp.toString() ? `/blog?${qp.toString()}` : '/blog');
+                    }}
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                     disabled={page === 1}
                     className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800"
                   >
@@ -342,7 +404,17 @@ function BlogContent() {
                     Prev
                   </button>
                   <button
+<<<<<<< HEAD
                     onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+=======
+                    onClick={() => {
+                      const qp = new URLSearchParams(searchParams);
+                      const next = Math.min(totalPages, page + 1);
+                      if (next === 1) qp.delete('page');
+                      else qp.set('page', String(next));
+                      router.push(qp.toString() ? `/blog?${qp.toString()}` : '/blog');
+                    }}
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
                     disabled={page === totalPages}
                     className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800"
                   >

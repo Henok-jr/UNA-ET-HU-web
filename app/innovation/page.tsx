@@ -4,6 +4,10 @@ import Footer from "../components/Footer";
 import EventFlipCard from "../components/innovation/EventFlipCard";
 import { Button } from "@/components/ui/button";
 import { PlayCircle } from "lucide-react";
+<<<<<<< HEAD
+=======
+import Link from "next/link";
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
 
 const teamHeadImage =
   "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=80";
@@ -88,8 +92,13 @@ export default function InnovationPage() {
               community engages with UN-style programs.
             </p>
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+<<<<<<< HEAD
               <Button size="lg" className="font-bold shadow-xl shadow-primary/20">
                 Explore Projects
+=======
+              <Button asChild size="lg" className="font-bold shadow-xl shadow-primary/20">
+                <Link href="/auth/signup">Join the Innovation Team</Link>
+>>>>>>> 3d44e0a9aef41defdaea0723ff2828259f0b1bae
               </Button>
               <Button
                 size="lg"
